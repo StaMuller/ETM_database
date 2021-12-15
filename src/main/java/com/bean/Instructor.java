@@ -12,7 +12,6 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Instructor {
-    private long i_id;
-    private String name;
+    private long id;
     private Timestamp teachingTime;
 }

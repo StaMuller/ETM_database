@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.Data;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.IdType;
 
 import java.sql.Timestamp;
 
@@ -12,7 +14,8 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Employee {
-    private long e_id;
+    @TableId(value = "id", type = IdType.AUTO)
+    private long id;
     private String name;
     private String gender;
     private int age;

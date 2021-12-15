@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mapper.EmployeeMapper">
+
+    <select id="getTakes" resultType="com.bean.Takes" parameterType="java.lang.Long">
+        select *
+        from takes
+        where employee_id = #{id};
+    </select>
+
+    <select id="getEmployeeByName" resultType="com.bean.Employee" parameterType="java.lang.String">
+        select *
+        from employee
+        where name = #{name};
+    </select>
+
+</mapper>

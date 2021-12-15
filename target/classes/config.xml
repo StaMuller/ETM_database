@@ -19,6 +19,9 @@
     <!--Mapper需要在mybatis核心配置文件中注册-->
     <mappers>
         <mapper resource="mapper/InstructorMapper.xml"/>
+        <mapper resource="mapper/AdministratorMapper.xml"/>
+        <mapper resource="mapper/ManagerMapper.xml"/>
+        <mapper resource="mapper/EmployeeMapper.xml"/>
     </mappers>
 
 </configuration>

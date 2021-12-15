@@ -9,8 +9,7 @@ import lombok.Data;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class Manager {
-    private long m_id;
-    private String name;
+public class Manager {  // 部门主管
+    private long id;
     private int dept_id;
 }

@@ -12,7 +12,7 @@ import lombok.Data;
 public class Course {
     private long course_id;
     private String course_name;
-    private long i_id;
+    private long instructor_id;
     private String type;
     private String content;
     private int state;
