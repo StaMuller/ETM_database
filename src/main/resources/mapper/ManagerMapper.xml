@@ -22,4 +22,36 @@
         where employee_id = #{employeeId};
     </select>
 
+    <update id="transDept">
+        update employee
+        set dept_id = #{deptId}
+        where employee_id = #{employeeId};
+    </update>
+
+    <select id="queryTakesOfCourse" resultType="com.bean.Takes" parameterType="java.lang.Long">
+        select *
+        from takes
+        where course_id = #{courseId};
+    </select>
+
+    <select id="queryPassedTakes" resultType="com.bean.Takes">
+        select *
+        from takes
+        where state = "通过";
+    </select>
+
+    <!--通过课程号、员工号与state进行分组，输出数量大于2的分组员工号-->
+    <select id="queryUotPassedThree" resultType="java.lang.Long">
+        select
+            employee_id
+        from
+            takes
+        where exists(
+            select employee_id
+            from takes
+            where state = "不通过"
+            group by course_id, employee_id, state
+            having count(distinct takes.id) > 2)
+    </select>
+
 </mapper>

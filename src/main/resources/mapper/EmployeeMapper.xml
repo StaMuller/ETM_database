@@ -11,6 +11,12 @@
         where employee_id = #{id};
     </select>
 
+    <select id="getEmployeeById" resultType="com.bean.Employee" parameterType="java.lang.Long">
+        select *
+        from employee
+        where id = #{id};
+    </select>
+
     <select id="getEmployeeByName" resultType="com.bean.Employee" parameterType="java.lang.String">
         select *
         from employee

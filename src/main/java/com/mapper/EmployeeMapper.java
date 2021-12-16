@@ -8,5 +8,6 @@ import java.util.List;
 
 public interface EmployeeMapper extends BaseMapper<Employee> {
     List<Takes> getTakes(long id);
+    Employee getEmployeeById(Long id);
     List<Employee> getEmployeeByName(String name);
 }

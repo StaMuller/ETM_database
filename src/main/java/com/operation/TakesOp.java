@@ -1,19 +1,24 @@
 package com.operation;
 
-import com.bean.Takes;
 import com.mapper.TakesMapper;
 import com.utils.MybatisUtils;
 import org.apache.ibatis.session.SqlSession;
+
+import java.util.List;
 
 public class TakesOp {
 
     SqlSession sqlSession = MybatisUtils.getSqlSession();
     TakesMapper takesMapper = sqlSession.getMapper(TakesMapper.class);
 
-    public void addCourse(long employee_id, int course_id){
-        Takes takes = new Takes();
-        takes.setEmployee_id(employee_id);
-        takes.setCourse_id(course_id);
-        takesMapper.addCourse(takes);
+    // 判断该员工是否符合转部门条件
+    public boolean trans(Long employeeId){
+        List<Long> allCourse = takesMapper.courseOfEmployee(employeeId);
+        List<Long> passedCourse = takesMapper.passedCourseOfEmployee(employeeId);
+        return allCourse.size() == passedCourse.size();
+    }
+
+    public void close(){
+        sqlSession.close();
     }
 }
