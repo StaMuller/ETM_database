@@ -7,7 +7,21 @@
     <!--id对应方法名，resultType对应返回类-->
 
     <select id="getAllInstructor" resultType="com.bean.Instructor">
-        select * from instructor
+        select * from instructor;
     </select>
+
+    <select id="getInstructorById" resultType="com.bean.Instructor" parameterType="java.lang.Long">
+        select
+               *
+        from
+             instructor
+        where
+              id = #{id};
+    </select>
+
+    <delete id="deleteInstructor" parameterType="java.lang.Long">
+        delete from instructor
+        where id = #{id};
+    </delete>
 
 </mapper>

@@ -17,4 +17,17 @@
         where employee_id = #{employeeId} and state = "通过";
     </select>
 
+    <delete id="deleteTakesRecord" parameterType="java.lang.Long">
+        delete from takes
+        where employee_id = #{employeeId};
+    </delete>
+
+    <select id="gradeOfEmployee" parameterType="java.lang.Long" resultType="com.bean.Takes">
+        select *
+        from takes
+        where
+              employee_id = #{employeeId}
+          and number != null;
+    </select>
+
 </mapper>

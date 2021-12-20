@@ -10,4 +10,25 @@
         where course_id = #{courseId};
     </select>
 
+    <update id="updateInstructorOfCourse" parameterType="java.lang.Long">
+        update course
+        set instructor_id = 00000000000
+        where instructor_id = #{instructorId};
+    </update>
+
+    <insert id="addCourse" parameterType="com.bean.Course">
+        <selectKey keyProperty="course_id" order="AFTER" resultType="java.lang.Long">
+            SELECT LAST_INSERT_ID() as course_id;
+        </selectKey>
+        insert into
+            course
+        values
+            (#{course_id}, #{course_name}, #{instructor_id}, #{type}, #{content}, #{state});
+    </insert>
+
+    <delete id="deleteCourse" parameterType="java.lang.Long">
+        delete from course
+        where course_id = #{courseId};
+    </delete>
+
 </mapper>

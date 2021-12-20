@@ -1,11 +1,13 @@
 package com.mapper;
 
 import com.bean.Employee;
+import com.bean.Manager;
 import com.bean.Takes;
 
 import java.util.List;
 
 public interface ManagerMapper {
+    Manager findManagerById(Long id);
     List<Employee> findManagedEmployee(int dept_id);
     void addCourse(Takes takes);
     List<Takes> queryTakesOfEmployee(Long employeeId);
@@ -13,4 +15,5 @@ public interface ManagerMapper {
     List<Takes> queryTakesOfCourse(Long courseId);
     List<Takes> queryPassedTakes();
     List<Long> queryNotPassedThree();
+    void deleteManager(Long id);
 }

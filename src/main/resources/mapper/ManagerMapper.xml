@@ -54,4 +54,15 @@
             having count(distinct takes.id) > 2)
     </select>
 
+    <select id="findManagerById" parameterType="java.lang.Long" resultType="com.bean.Manager">
+        select *
+        from manager
+        where id = #{id};
+    </select>
+
+    <delete id="deleteManager" parameterType="java.lang.Long">
+        delete from manager
+        where id = #{id};
+    </delete>
+
 </mapper>

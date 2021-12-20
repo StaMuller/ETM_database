@@ -10,4 +10,9 @@
         where dept_id = #{deptId};
     </select>
 
+    <delete id="deleteNecessity" parameterType="java.lang.Long">
+        delete from necessity
+        where course_id = #{courseId};
+    </delete>
+
 </mapper>
