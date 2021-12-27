@@ -3,6 +3,7 @@ package com.runApp;
 import com.bean.Employee;
 import com.operation.EmployeeOp;
 import com.operation.InstructorOp;
+import com.operation.ManagerOp;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -11,15 +12,18 @@ import javafx.stage.Stage;
 import javafx.scene.Group;
 import javafx.scene.text.Font;
 
+import java.util.List;
+
 // 主界面
 public class MainScene extends Application {
 
     InstructorScene instructorScene = new InstructorScene();
     EmployeeScene employeeScene = new EmployeeScene();
+    ManagerScene managerScene = new ManagerScene();
 
     InstructorOp instructorOp = new InstructorOp();
     EmployeeOp employeeOp = new EmployeeOp();
-
+    ManagerOp managerOp = new ManagerOp();
     @Override
     public void start(Stage primaryStage) {
         Group root = new Group();
@@ -54,17 +58,18 @@ public class MainScene extends Application {
 
         Font button = new Font("楷体", 16);
         // 设置跳转按钮
+
         final Button instructorButton = new Button("教员");
         instructorButton.setLayoutX(200);
         instructorButton.setLayoutY(300);
         instructorButton.setPrefHeight(30);
-        instructorButton.setPrefWidth(100);
+        instructorButton.setPrefWidth(120);
         instructorButton.setFont(button);
         root.getChildren().add(instructorButton);
         final Button managerButton = new Button("部门主管");
         managerButton.setLayoutX(400);
         managerButton.setLayoutY(300);
-        managerButton.setPrefWidth(100);
+        managerButton.setPrefWidth(120);
         managerButton.setPrefHeight(30);
         managerButton.setFont(button);
         root.getChildren().add(managerButton);
@@ -72,9 +77,17 @@ public class MainScene extends Application {
         employeeButton.setLayoutX(600);
         employeeButton.setLayoutY(300);
         employeeButton.setPrefHeight(30);
-        employeeButton.setPrefWidth(100);
+        employeeButton.setPrefWidth(120);
         employeeButton.setFont(button);
         root.getChildren().add(employeeButton);
+
+        final Button administratorButton = new Button("系统管理员");
+        administratorButton.setLayoutX(800);
+        administratorButton.setLayoutY(300);
+        administratorButton.setPrefWidth(120);
+        administratorButton.setPrefHeight(30);
+        administratorButton.setFont(button);
+        root.getChildren().add(administratorButton);
 
         instructorButton.setOnMouseClicked(e ->{
             try{
@@ -104,6 +117,47 @@ public class MainScene extends Application {
                 exception.printStackTrace();
             }
         });
+
+        managerButton.setOnMouseClicked(e ->{
+            try{
+                Employee manager = managerOp.getManagerById(Long.parseLong(id_area.getText()));
+                if(manager == null){
+                    new Alert(Alert.AlertType.NONE, "该员工号无法使用该权限", new ButtonType[]{ButtonType.CLOSE}).show();
+                }else{
+                    primaryStage.setScene(managerScene.setManager(manager, primaryStage, scene));
+                }
+            } catch (NumberFormatException exception){
+                new Alert(Alert.AlertType.NONE, "请填写相应员工号", new ButtonType[]{ButtonType.CLOSE}).show();
+            } catch (Exception exception){
+                exception.printStackTrace();
+            }
+        });
+//            try{
+//
+////                List<Employee> employeeList = managerOp.findManagedEmployee(Integer.parseInt(id_area.getText()));
+//                if(employee == null){
+//                    new Alert(Alert.AlertType.NONE, "不存在该员工号", new ButtonType[]{ButtonType.CLOSE}).show();
+//                }else{
+
+
+
+
+
+
+
+
+
+//                    for (Employee employee : employeeList){
+//                        primaryStage.setScene(managerScene.setManager(employeeList, primaryStage, scene));
+//                }
+
+//                }
+//            } catch (NumberFormatException exception){
+//                new Alert(Alert.AlertType.NONE, "请填写相应员工号", new ButtonType[]{ButtonType.CLOSE}).show();
+//            } catch (Exception exception){
+//                exception.printStackTrace();
+//            }
+//        });
     }
 
 }

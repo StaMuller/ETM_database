@@ -24,12 +24,21 @@ public class ManagerOp {
     TakesOp takesOp = new TakesOp();
     CourseOp courseOp = new CourseOp();
 
-    // manager (1
+//获取管理员id
+    public Employee getManagerById(Long employeeId){
+        if(managerMapper.findManagerById(employeeId) == null){
+            return null;
+        }else{
+            return employeeMapper.getEmployeeById(employeeId);
+        }
+    }
+
+    // manager (1  查看自己部门下的员工信息
     public List<Employee> findManagedEmployee(int dept_id){
         return managerMapper.findManagedEmployee(dept_id);
     }
 
-    // manager (2
+    // manager (2   根据员工号为员工分配培训课程
     public void addCourseById(Long courseId, Long employeeId){
         Takes takes = new Takes();
         takes.setEmployee_id(employeeId);
@@ -38,7 +47,7 @@ public class ManagerOp {
         sqlSession.commit();
     }
 
-    // manager (2
+    // manager (2    根据姓名为员工分配培训课程
     public void addCourseByName(Long courseId, String name){
         // 首先找到对应员工的ID
         List<Employee> employeeList = employeeMapper.getEmployeeByName(name);
@@ -51,7 +60,7 @@ public class ManagerOp {
         sqlSession.commit();
     }
 
-    // manager (3
+    // manager (3   根据姓名或员工号查询员工的培训成绩
     public List<Takes> queryTakesById(Long employeeId){
         return managerMapper.queryTakesOfEmployee(employeeId);
     }

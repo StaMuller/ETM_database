@@ -23,5 +23,5 @@ public class Employee {
     private String address;
     private long telephone;
     private String email;
-    private int dept_id;
+    private int dept;
 }

@@ -6,17 +6,52 @@
 <mapper namespace="com.mapper.InstructorMapper">
     <!--id对应方法名，resultType对应返回类-->
 
+    <update id="setScore" parameterType="com.bean.Takes">
+        update takes
+        set number = 90
+--             row4 = #{number}
+        where employee_id = #{employeeId}
+          and course_id = #{courseId};
+    </update>
+
+    <update id="test" parameterType="Map">
+        update takes
+        set number= #{number}
+        where (employee_id = #{employee_id}
+          and course_id = #{course_id}) ;
+    </update>
+
     <select id="getAllInstructor" resultType="com.bean.Instructor">
         select * from instructor;
     </select>
 
-    <select id="getInstructorById" resultType="com.bean.Instructor" parameterType="java.lang.Long">
+    <select id="getInstructorById" resultType="com.bean.Instructor" parameterType="com.bean.Instructor">
         select
-               *
+             *
         from
              instructor
         where
               id = #{id};
+    </select>
+
+    <select id="getInstructedEmployee" resultType="java.lang.Long" parameterType="com.bean.Instructor">
+    select
+    employee_id
+from
+takes
+    where
+course_id =(select
+       course_id
+from
+course
+where
+    instructor_id = #{id});
+--         select
+--              *
+--         from
+--             course
+--         where
+--             instructor_id = #{id};
     </select>
 
     <delete id="deleteInstructor" parameterType="java.lang.Long">

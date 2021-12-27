@@ -21,9 +21,9 @@ public class EmployeeOp {
         return employeeMapper.getEmployeeById(employeeId);
     }
 
-
     public void close(){
         sqlSession.close();
     }
+
 }
 

@@ -61,10 +61,11 @@ public class EmployeeScene {
         person.minHeightProperty().bind(person.prefHeightProperty());
         person.maxHeightProperty().bind(person.prefHeightProperty());
         person.setPrefWidth(750);
+        person.setFixedCellSize(40);
         ObservableList<EmployeeView> data = FXCollections.observableArrayList(
                 new EmployeeView(employee.getId(), employee.getName(), employee.getGender(), employee.getAge(),
                         employee.getTime(), employee.getAddress(), employee.getTelephone(), employee.getEmail(),
-                        departmentOp.getDeptNameById(employee.getDept_id()))
+                        departmentOp.getDeptNameById(employee.getDept()))
         );
         person.setEditable(true);
         person.setLayoutX(180);

@@ -23,7 +23,7 @@ public class AdministratorTest {
         employee.setAddress("西安");
         employee.setTelephone(12345);
         employee.setEmail("example@xx.com");
-        employee.setDept_id(6);
+        employee.setDept(6);
         administratorOp.addEmployee(employee);
     }
 }

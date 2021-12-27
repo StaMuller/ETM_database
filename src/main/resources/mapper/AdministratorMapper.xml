@@ -13,7 +13,7 @@
         insert into
             employee
         values
-            (#{id}, #{name}, #{gender}, #{age}, #{time}, #{address}, #{telephone}, #{email}, #{dept_id});
+            (#{id}, #{name}, #{gender}, #{age}, #{time}, #{address}, #{telephone}, #{email}, #{dept});
     </insert>
 
     <update id="updateEmployee" parameterType="com.bean.Employee">

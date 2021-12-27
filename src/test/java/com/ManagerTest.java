@@ -37,14 +37,26 @@ public class ManagerTest {
     }
 
     @Test
+    public void test5(){
+       Employee temp = managerOp.getManagerById(Long.parseLong("10231106004"));
+       System.out.println("打印八"+temp);
+
+    }
+    @Test
+    public void test4(){
+        managerOp.transDeptById(Long.parseLong("10231106004"),6);
+    }
+
+    @Test
     public void test3(){
-        List<Takes> takesList = managerOp.queryTakesById(Long.parseLong("10231106003"));
+        List<Takes> takesList = managerOp.queryTakesById(Long.parseLong("10231106001"));
         for(Takes takes : takesList){
-            System.out.println(takes);
+            System.out.println("打印四："+takes);
         }
         takesList = managerOp.queryTakesByName("卢潇");
         for(Takes takes : takesList){
-            System.out.println(takes);
+            System.out.println("打印四："+takes);
         }
     }
+
 }

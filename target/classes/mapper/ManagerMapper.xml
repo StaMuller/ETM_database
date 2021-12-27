@@ -5,6 +5,12 @@
 
 <mapper namespace="com.mapper.ManagerMapper">
 
+    <select id="findManagedEmployee" resultType="com.bean.Employee" parameterType="int">
+        select *
+        from employee
+        where dept = #{deptId};
+    </select>
+
     <insert id="addCourse" parameterType="com.bean.Takes" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
         <!--主键自增-->
         <selectKey keyProperty="id" order="AFTER" resultType="int">

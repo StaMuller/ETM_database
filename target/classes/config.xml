@@ -25,6 +25,7 @@
         <mapper resource="mapper/TakesMapper.xml"/>
         <mapper resource="mapper/NecessityMapper.xml"/>
         <mapper resource="mapper/DepartmentMapper.xml"/>
+        <mapper resource="mapper/CourseMapper.xml"/>
     </mappers>
 
 </configuration>
