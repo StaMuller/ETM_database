@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 import java.util.List;
 
 public class ManagerScene {
+
     EmployeeOp employeeOp = new EmployeeOp();
     DepartmentOp departmentOp = new DepartmentOp();
     ManagerOp managerOp = new ManagerOp();
@@ -85,9 +86,6 @@ public class ManagerScene {
             }
 
         });
-
-
-
         return scene;
     }
 

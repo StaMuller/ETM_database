@@ -130,10 +130,46 @@ public class EmployeeScene {
         });
 
         // 查看被分配的课程与教员信息
+        final Label course_label = new Label("课程信息");
+        course_label.setLayoutX(50);
+        course_label.setLayoutY(250);
+        course_label.setFont(area);
+        final TextArea course_area = new TextArea();
+        course_area.setLayoutX(50);
+        course_area.setLayoutY(300);
+        course_area.setPrefWidth(450);
+        course_area.setPrefHeight(200);
+        course_area.setWrapText(true);
+        final Button course_query = new Button("查询");
+        course_query.setLayoutX(200);
+        course_query.setLayoutY(250);
+        course_query.setFont(button);
+        root.getChildren().addAll(course_label, course_area, course_query);
 
+        course_query.setOnMouseClicked(e -> {
 
+        });
 
         // 查看历史培训信息
+        final Label score_label = new Label("历史培训信息");
+        score_label.setLayoutX(550);
+        score_label.setLayoutY(250);
+        score_label.setFont(area);
+        final TextArea score_area = new TextArea();
+        score_area.setLayoutX(550);
+        score_area.setLayoutY(300);
+        score_area.setPrefWidth(450);
+        score_area.setPrefHeight(200);
+        score_area.setWrapText(true);
+        final Button score_query = new Button("查询");
+        score_query.setLayoutX(650);
+        score_query.setLayoutY(250);
+        score_query.setFont(button);
+        root.getChildren().addAll(score_label, score_area, score_query);
+
+        score_query.setOnMouseClicked(e -> {
+
+        });
 
         return scene;
     }

@@ -9,6 +9,8 @@ import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
+import java.util.List;
+
 public class InstructorScene {
 
     InstructorOp instructorOp = new InstructorOp();
@@ -54,7 +56,10 @@ public class InstructorScene {
         root.getChildren().addAll(teach_label, teach_area, teach_query);
 
         teach_query.setOnMouseClicked(e -> {
-
+            List<Employee> employeeList = instructorOp.findInstructedEmployee(instructor.getId());
+            for(Employee employee : employeeList){
+                System.out.println(employee);
+            }
         });
 
         // 录入培训成绩
@@ -103,7 +108,6 @@ public class InstructorScene {
         insert_grade.setOnMouseClicked(e ->{
             // 录入成绩
         });
-
 
         return scene;
     }
