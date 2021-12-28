@@ -1,6 +1,9 @@
 package com.runApp;
 
+import com.bean.Course;
 import com.bean.Employee;
+import com.bean.Takes;
+import com.operation.CourseOp;
 import com.operation.DepartmentOp;
 import com.operation.EmployeeOp;
 import com.runApp.Container.EmployeeView;
@@ -18,11 +21,14 @@ import javafx.stage.Stage;
 import javafx.util.converter.IntegerStringConverter;
 import javafx.util.converter.LongStringConverter;
 
+import java.util.List;
+
 
 public class EmployeeScene {
 
     EmployeeOp employeeOp = new EmployeeOp();
     DepartmentOp departmentOp = new DepartmentOp();
+    CourseOp courseOp = new CourseOp();
 
     public Scene setEmployee(Employee employee, Stage primaryStage, Scene primaryScene){
         Group root = new Group();
@@ -48,7 +54,7 @@ public class EmployeeScene {
         title_label.setFont(title);
         root.getChildren().add(title_label);
 
-        // 管理个人信息：员工号、入职时间与部门号不能更改
+        // 管理个人信息：性别、员工号、入职时间与部门号不能更改
         Font area = new Font("楷体", 15);
         final Label info_label = new Label("个人信息");
         info_label.setLayoutX(50);
@@ -81,10 +87,6 @@ public class EmployeeScene {
                         t.getTablePosition().getRow()).setName(t.getNewValue()));
         TableColumn<EmployeeView, String> tableColumnGender = new TableColumn<>("gender");
         tableColumnGender.setCellValueFactory(new PropertyValueFactory<>("gender"));
-        tableColumnGender.setCellFactory(TextFieldTableCell.forTableColumn());
-        tableColumnGender.setOnEditCommit(
-                (TableColumn.CellEditEvent<EmployeeView, String> t) -> t.getTableView().getItems().get(
-                        t.getTablePosition().getRow()).setGender(t.getNewValue()));
         TableColumn<EmployeeView, String> tableColumnTime = new TableColumn<>("time");
         tableColumnTime.setCellValueFactory(new PropertyValueFactory<>("time"));
         TableColumn<EmployeeView, Integer> tableColumnAge = new TableColumn<>("age");
@@ -126,11 +128,21 @@ public class EmployeeScene {
         commit.setFont(button);
         root.getChildren().add(commit);
         commit.setOnMouseClicked(e -> {
-
+            Employee temp = new Employee();
+            temp.setId(employee.getId());
+            temp.setName(data.get(0).getName());
+            temp.setGender(employee.getGender());
+            temp.setAge(data.get(0).getAge());
+            temp.setTime(employee.getTime());
+            temp.setAddress(data.get(0).getAddress());
+            temp.setTelephone(data.get(0).getTelephone());
+            temp.setEmail(data.get(0).getEmail());
+            temp.setDept(employee.getDept());
+            employeeOp.reviseInfo(temp);
         });
 
         // 查看被分配的课程与教员信息
-        final Label course_label = new Label("课程信息");
+        final Label course_label = new Label("课程与教员信息");
         course_label.setLayoutX(50);
         course_label.setLayoutY(250);
         course_label.setFont(area);
@@ -147,7 +159,22 @@ public class EmployeeScene {
         root.getChildren().addAll(course_label, course_area, course_query);
 
         course_query.setOnMouseClicked(e -> {
-
+            StringBuilder showString = new StringBuilder("课程号 课程名 导师 课程类型 课程内容 结课状态\n");
+            List<Course> courseList = employeeOp.findCourse(employee.getId());
+            for(Course course : courseList){
+                showString
+                        .append(course.getCourse_id()).append("   ")
+                        .append(course.getCourse_name()).append("   ")
+                        .append(employeeOp.getEmployeeById(course.getInstructor_id()).getName()).append("   ")
+                        .append(course.getType()).append("   ")
+                        .append(course.getContent()).append("   ");
+                if(course.getState() == 0){
+                    showString.append("未结课\n");
+                }else{
+                    showString.append("已结课\n");
+                }
+            }
+            course_area.setText(showString.toString());
         });
 
         // 查看历史培训信息
@@ -168,7 +195,23 @@ public class EmployeeScene {
         root.getChildren().addAll(score_label, score_area, score_query);
 
         score_query.setOnMouseClicked(e -> {
-
+            String showString = "";
+            List<Takes> takesList = employeeOp.findScore(employee.getId());
+            for(Takes takes : takesList){
+                showString += (takes.getCourse_id() + "  " +
+                        courseOp.getCourseById(takes.getCourse_id()).getCourse_name() + "  "
+                        );
+                if(takes.getState() == null){
+                    showString += "未考试\n";
+                }else{
+                    showString += (
+                            takes.getNumber() + "  " +
+                            takes.getState() + "  " +
+                            takes.getTime() + "\n"
+                    );
+                }
+            }
+            score_area.setText(showString);
         });
 
         return scene;

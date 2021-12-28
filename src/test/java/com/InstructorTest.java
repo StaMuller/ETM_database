@@ -26,35 +26,26 @@ public class InstructorTest {
 
 
     @Test
-    public void test2(){
-
-//        Long id = 10231106003L;
-
-//        List<Employee> employeeList = instructorOp.findInstructedEmployee(Long.parseLong("10231106003"));
-//        List<Long> id = instructorOp.findInstructedEmployee(Long.parseLong("10231106003"));
-//        for(Employee employee : employeeList){
+    public void test2(){    //instructor (1 查看该教员教授的员工的信息
             System.out.println("我在打印二号测试");
-            System.out.println(instructorOp.findInstructedEmployee(Long.parseLong("10231106003")));
+            System.out.println(instructorOp.findInstructedEmployee(Long.parseLong("10231106002")));
 //        }
     }
 
     @Test
-    public void test3(){
+    public void test3(){   //根据id获取instructor
 
         Employee temp = instructorOp.getInstructorById(Long.parseLong("10231106003"));
         System.out.println("打印九"+temp);
     }
 
     @Test
-    public void test4(){
-//        instructorOp.inputScore(Long.parseLong("35140"),Long.parseLong("10231106001"),90);
-
-          HashMap<String,Object> map=new HashMap<String,Object>();
-            map.put("number",1);
-            map.put("employee_id",Long.parseLong("10231106002"));
-            map.put("course_id",Long.parseLong("35140"));
-
-        instructorOp.updateTest(map);
+    public void test4(){    //录入成绩
+          HashMap<String,Object> map = new HashMap<>();
+            map.put("number",98);
+            map.put("employeeId",Long.parseLong("10231106004"));
+            map.put("courseId",Long.parseLong("35142"));
+        instructorOp.inputScore(map);
         System.out.println("打印九");
     }
 }

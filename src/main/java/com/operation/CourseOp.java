@@ -25,6 +25,10 @@ public class CourseOp {
         return courseList;
     }
 
+    public Course getCourseById(Long courseId){
+        return courseMapper.getCourseById(courseId);
+    }
+
     public void close(){
         sqlSession.close();
     }

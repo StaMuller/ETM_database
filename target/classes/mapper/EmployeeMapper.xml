@@ -11,6 +11,17 @@
         where employee_id = #{id};
     </select>
 
+    <update id="reviseInfo" parameterType="com.bean.Employee">
+        update employee
+        set name = #{name},
+            gender = #{gender},
+            age = #{age},
+            address = #{address},
+            telephone = #{telephone},
+            email = #{email}
+        where id = #{id}
+    </update>
+
     <select id="getEmployeeById" resultType="com.bean.Employee" parameterType="java.lang.Long">
         select *
         from employee
@@ -27,5 +38,22 @@
         delete from employee
         where id = #{id};
     </delete>
+
+    <select id="getCourse" resultType="com.bean.Course" parameterType="java.lang.Long">
+        select *
+        from
+        course
+        where state = 0 and course_id =
+        (select course_id
+        from takes
+        where employee_id = #{id});
+    </select>
+
+    <select id="getScore" resultType="com.bean.Takes" parameterType="java.lang.Long">
+        select *
+        from
+            takes
+        where employee_id = #{id};
+    </select>
 
 </mapper>

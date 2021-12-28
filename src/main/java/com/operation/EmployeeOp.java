@@ -1,5 +1,6 @@
 package com.operation;
 
+import com.bean.Course;
 import com.bean.Employee;
 import com.bean.Takes;
 import com.mapper.EmployeeMapper;
@@ -13,7 +14,7 @@ public class EmployeeOp {
     SqlSession sqlSession = MybatisUtils.getSqlSession();
     EmployeeMapper employeeMapper = sqlSession.getMapper(EmployeeMapper.class);
 
-    // manager (1
+
     public List<Takes> getTakes(long id){
         return employeeMapper.getTakes(id);
     }
@@ -21,6 +22,21 @@ public class EmployeeOp {
         return employeeMapper.getEmployeeById(employeeId);
     }
 
+    //employee (1 查看被分配到的课程以及教员信息
+    public List<Course> findCourse(Long employeeId) {
+        return employeeMapper.getCourse(employeeId);
+    }
+
+    //employee (2 查看自己的历史培训成绩信息
+    public List<Takes> findScore(Long employeeId) {
+        return employeeMapper.getScore(employeeId);
+    }
+
+    //employee (3 维护个人信息
+    public void reviseInfo(Employee employee){
+        employeeMapper.reviseInfo(employee);
+        sqlSession.commit();
+    }
     public void close(){
         sqlSession.close();
     }
