@@ -9,6 +9,7 @@ import com.operation.InstructorOp;
 import com.operation.ManagerOp;
 import org.junit.Test;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class ManagerTest {
@@ -37,6 +38,18 @@ public class ManagerTest {
     }
 
     @Test
+    public void test3(){
+        List<Takes> takesList = managerOp.queryTakesById(Long.parseLong("10231106001"));
+        for(Takes takes : takesList){
+            System.out.println("打印四："+takes);
+        }
+        takesList = managerOp.queryTakesByName("卢潇");
+        for(Takes takes : takesList){
+            System.out.println("打印四："+takes);
+        }
+    }
+
+    @Test
     public void test5(){
        Employee temp = managerOp.getManagerById(Long.parseLong("10231106004"));
        System.out.println("打印八"+temp);
@@ -48,15 +61,15 @@ public class ManagerTest {
     }
 
     @Test
-    public void test3(){
-        List<Takes> takesList = managerOp.queryTakesById(Long.parseLong("10231106001"));
-        for(Takes takes : takesList){
-            System.out.println("打印四："+takes);
-        }
-        takesList = managerOp.queryTakesByName("卢潇");
-        for(Takes takes : takesList){
-            System.out.println("打印四："+takes);
-        }
+    public void test6(){
+        List<HashMap<String, Object>> list = managerOp.queryNotPassed(Long.parseLong("35141"), 0);
+        System.out.println(list);
+    }
+
+    @Test
+    public void test7(){
+        List<Employee> employeeList = managerOp.queryTransEmployee(4);
+        System.out.println(employeeList);
     }
 
 }

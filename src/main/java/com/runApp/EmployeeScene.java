@@ -195,23 +195,20 @@ public class EmployeeScene {
         root.getChildren().addAll(score_label, score_area, score_query);
 
         score_query.setOnMouseClicked(e -> {
-            String showString = "";
+            StringBuilder showString = new StringBuilder();
             List<Takes> takesList = employeeOp.findScore(employee.getId());
             for(Takes takes : takesList){
-                showString += (takes.getCourse_id() + "  " +
-                        courseOp.getCourseById(takes.getCourse_id()).getCourse_name() + "  "
-                        );
+                showString.append(takes.getCourse_id()).append("  ")
+                        .append(courseOp.getCourseById(takes.getCourse_id()).getCourse_name()).append("  ");
                 if(takes.getState() == null){
-                    showString += "未考试\n";
+                    showString.append("未考试\n");
                 }else{
-                    showString += (
-                            takes.getNumber() + "  " +
-                            takes.getState() + "  " +
-                            takes.getTime() + "\n"
-                    );
+                    showString.append(takes.getNumber()).append("  ")
+                            .append(takes.getState()).append("  ")
+                            .append(takes.getTime()).append("\n");
                 }
             }
-            score_area.setText(showString);
+            score_area.setText(showString.toString());
         });
 
         return scene;
