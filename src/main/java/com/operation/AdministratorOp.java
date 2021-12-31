@@ -21,6 +21,14 @@ public class AdministratorOp {
     TakesMapper takesMapper = sqlSession.getMapper(TakesMapper.class);
     NecessityMapper necessityMapper = sqlSession.getMapper(NecessityMapper.class);
 
+    public Employee getAdminById(Long employeeId){
+        if(administratorMapper.getAdministratorById(employeeId) == null){
+            return null;
+        }else{
+            return employeeMapper.getEmployeeById(employeeId);
+        }
+    }
+
     // ad (1 增加
     public void addEmployee(Employee employee){
         administratorMapper.addEmployee(employee);

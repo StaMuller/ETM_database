@@ -1,15 +1,17 @@
-package com.bean;
+package com.runApp.Container;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.sql.Timestamp;
+
 @Data
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class Course {
+public class CourseView {
     private long course_id;
     private String course_name;
     private long instructor_id;

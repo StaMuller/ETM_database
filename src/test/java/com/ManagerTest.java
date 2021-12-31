@@ -62,13 +62,13 @@ public class ManagerTest {
 
     @Test
     public void test6(){
-        List<HashMap<String, Object>> list = managerOp.queryNotPassed(Long.parseLong("35141"), 0);
+        List<HashMap<String, Object>> list = managerOp.queryNotPassed(Long.parseLong("35140"), 0);
         System.out.println(list);
     }
 
     @Test
     public void test7(){
-        List<Employee> employeeList = managerOp.queryTransEmployee(4);
+        List<Employee> employeeList = managerOp.queryTransEmployee(1);
         System.out.println(employeeList);
     }
 

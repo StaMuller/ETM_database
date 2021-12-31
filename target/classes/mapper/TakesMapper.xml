@@ -6,13 +6,13 @@
 <mapper namespace="com.mapper.TakesMapper">
 
     <select id="courseOfEmployee" resultType="java.lang.Long" parameterType="java.lang.Long">
-        select course_id
+        select distinct course_id
         from takes
         where employee_id = #{employeeId};
     </select>
 
     <select id="passedCourseOfEmployee" resultType="java.lang.Long" parameterType="java.lang.Long">
-        select course_id
+        select distinct course_id
         from takes
         where employee_id = #{employeeId} and state = "通过";
     </select>

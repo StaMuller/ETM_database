@@ -1,14 +1,13 @@
 package com.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.bean.Administrator;
-import com.bean.Course;
-import com.bean.Employee;
-import com.bean.Log;
+import com.bean.*;
+import com.operation.AdministratorOp;
 
 import java.util.List;
 
 public interface AdministratorMapper extends BaseMapper<Administrator> {
+    Administrator getAdministratorById(Long id);
     void addEmployee(Employee employee);
     void updateEmployee(Employee employee);
     List<Employee> searchEmployee(String searchString);

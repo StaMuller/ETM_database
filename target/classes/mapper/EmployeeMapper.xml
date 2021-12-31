@@ -44,7 +44,7 @@
         from
         course
         where state = 0 and course_id =
-        (select course_id
+        any (select course_id
         from takes
         where employee_id = #{id});
     </select>

@@ -1,6 +1,5 @@
 package com.operation;
 
-import com.bean.Course;
 import com.bean.Employee;
 import com.bean.Takes;
 import com.mapper.EmployeeMapper;
@@ -22,14 +21,16 @@ public class EmployeeOp {
         return employeeMapper.getEmployeeById(employeeId);
     }
 
-    //employee (1 查看被分配到的课程以及教员信息
-    public List<Course> findCourse(Long employeeId) {
-        return employeeMapper.getCourse(employeeId);
+    //employee (1查看被分配到的课程以及教员信息
+    public List findCourse(Long employeeId) {
+        List courseInfo = employeeMapper.getCourse(employeeId);
+        return courseInfo;
     }
 
-    //employee (2 查看自己的历史培训成绩信息
-    public List<Takes> findScore(Long employeeId) {
-        return employeeMapper.getScore(employeeId);
+    //employee (2查看自己的历史培训成绩信息
+    public List findScore(Long employeeId) {
+        List scoreInfo = employeeMapper.getScore(employeeId);
+        return scoreInfo;
     }
 
     //employee (3 维护个人信息

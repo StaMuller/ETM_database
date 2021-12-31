@@ -18,21 +18,21 @@ public class InstructorOp {
     InstructorMapper instructorMapper = sqlSession.getMapper(InstructorMapper.class);
     EmployeeMapper employeeMapper = sqlSession.getMapper(EmployeeMapper.class);
 
-    public List<Instructor> getAllInstructor() {
+    public List<Instructor> getAllInstructor(){
         return instructorMapper.getAllInstructor();
     }
 
-    public Employee getInstructorById(Long employeeId) {
-        if (instructorMapper.getInstructorById(employeeId) == null) {
+    public Employee getInstructorById(Long employeeId){
+        if(instructorMapper.getInstructorById(employeeId) == null){
             return null;
-        } else {
+        }else{
             return employeeMapper.getEmployeeById(employeeId);
         }
     }
 
     // instructor (1 查看该教员教授的员工的信息
     public List<Employee> findInstructedEmployee(Long employeeId) {
-        if (instructorMapper.getInstructedEmployee(employeeId).size() == 0) {
+        if (instructorMapper.getInstructedEmployee(employeeId) == null) {
             System.out.println("查询失败");
             return null;
         } else {
@@ -46,13 +46,10 @@ public class InstructorOp {
     }
 
     //instructor (2 根据员工号以及课程号为员工录入培训成绩
-    // 参数map: number, employeeId, courseId
-    public void inputScore(HashMap<String, Object> map) {
-        if((int)map.get("number") > 100){
-            System.out.println("wrong number");
-            return;
-        }
+    public void inputScore(HashMap map){
         instructorMapper.setScore(map);
         sqlSession.commit();
     }
+
 }
+

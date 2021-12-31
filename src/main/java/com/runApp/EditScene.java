@@ -24,7 +24,7 @@ import javafx.util.converter.LongStringConverter;
 import java.util.List;
 
 
-public class EmployeeScene {
+public class EditScene {
 
     EmployeeOp employeeOp = new EmployeeOp();
     DepartmentOp departmentOp = new DepartmentOp();
@@ -48,7 +48,7 @@ public class EmployeeScene {
 
         // 设置标题
         Font title = new Font("FangSong", 30);
-        final Label title_label = new Label(employee.getName() + "，欢迎来到员工管理系统（员工权限）");
+        final Label title_label = new Label("您当前正在修改"+employee.getName() +"的个人信息（系统管理员权限）" );
         title_label.setLayoutX(350);
         title_label.setLayoutY(30);
         title_label.setFont(title);
@@ -140,80 +140,6 @@ public class EmployeeScene {
             temp.setDept(employee.getDept());
             employeeOp.reviseInfo(temp);
         });
-
-        // 查看被分配的课程与教员信息
-        final Label course_label = new Label("课程与教员信息");
-        course_label.setLayoutX(50);
-        course_label.setLayoutY(250);
-        course_label.setFont(area);
-        final TextArea course_area = new TextArea();
-        course_area.setLayoutX(50);
-        course_area.setLayoutY(300);
-        course_area.setPrefWidth(450);
-        course_area.setPrefHeight(200);
-        course_area.setWrapText(true);
-        final Button course_query = new Button("查询");
-        course_query.setLayoutX(200);
-        course_query.setLayoutY(250);
-        course_query.setFont(button);
-        root.getChildren().addAll(course_label, course_area, course_query);
-
-        course_query.setOnMouseClicked(e -> {
-            StringBuilder showString = new StringBuilder("课程号 课程名 导师 课程类型 课程内容 结课状态\n");
-            List<Course> courseList = employeeOp.findCourse(employee.getId());
-            for(Course course : courseList){
-                showString
-                        .append(course.getCourse_id()).append("   ")
-                        .append(course.getCourse_name()).append("   ")
-                        .append(employeeOp.getEmployeeById(course.getInstructor_id()).getName()).append("   ")
-                        .append(course.getType()).append("   ")
-                        .append(course.getContent()).append("   ");
-                if(course.getState() == 0){
-                    showString.append("未结课\n");
-                }else{
-                    showString.append("已结课\n");
-                }
-            }
-            course_area.setText(showString.toString());
-        });
-
-        // 查看历史培训信息
-        final Label score_label = new Label("历史培训信息");
-        score_label.setLayoutX(550);
-        score_label.setLayoutY(250);
-        score_label.setFont(area);
-        final TextArea score_area = new TextArea();
-        score_area.setLayoutX(550);
-        score_area.setLayoutY(300);
-        score_area.setPrefWidth(450);
-        score_area.setPrefHeight(200);
-        score_area.setWrapText(true);
-        final Button score_query = new Button("查询");
-        score_query.setLayoutX(650);
-        score_query.setLayoutY(250);
-        score_query.setFont(button);
-        root.getChildren().addAll(score_label, score_area, score_query);
-
-        score_query.setOnMouseClicked(e -> {
-            String showString = "";
-            List<Takes> takesList = employeeOp.findScore(employee.getId());
-            for(Takes takes : takesList){
-                showString += (takes.getCourse_id() + "  " +
-                        courseOp.getCourseById(takes.getCourse_id()).getCourse_name() + "  "
-                        );
-                if(takes.getState() == null){
-                    showString += "未考试\n";
-                }else{
-                    showString += (
-                            takes.getNumber() + "  " +
-                            takes.getState() + "  " +
-                            takes.getTime() + "\n"
-                    );
-                }
-            }
-            score_area.setText(showString);
-        });
-
         return scene;
     }
 

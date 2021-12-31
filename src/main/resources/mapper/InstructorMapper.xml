@@ -9,10 +9,17 @@
     <update id="setScore" parameterType="Map">
         update takes
         set number = #{number}
-        where number is null
-        and employee_id = #{employeeId}
-        and course_id = #{courseId}
-        order by takes.id desc limit 1;
+        where
+        number is null
+        and employee_id = #{employee_id}
+        and course_id = #{course_id}
+        and time in
+        (select max(time)
+        from (select *
+        from takes where
+          employee_id = #{employee_id}
+          and course_id = #{course_id}) t
+        group by course_id);
     </update>
 
     <select id="getAllInstructor" resultType="com.bean.Instructor">
@@ -29,11 +36,10 @@
     <select id="getInstructedEmployee" resultType="java.lang.Long" parameterType="com.bean.Instructor">
         select employee_id
         from takes
-        where exists (
-            select course_id
-            from course
-            where instructor_id = #{id}
-        );
+        where exists
+                  (select course_id
+                   from course
+                   where instructor_id = #{id});
     </select>
 
     <delete id="deleteInstructor" parameterType="java.lang.Long">

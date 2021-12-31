@@ -5,6 +5,12 @@
 
 <mapper namespace="com.mapper.AdministratorMapper">
 
+    <select id="getAdministratorById" resultType="com.bean.Administrator" parameterType="java.lang.Long">
+        select *
+        from administrator
+        where a_id = #{id};
+    </select>
+
     <insert id="addEmployee" parameterType="com.bean.Employee" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
         <!--主键自增-->
         <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
@@ -13,7 +19,7 @@
         insert into
             employee
         values
-            (#{id}, #{name}, #{gender}, #{age}, #{time}, #{address}, #{telephone}, #{email}, #{dept});
+            (#{id}, #{name}, #{gender}, #{age}, #{time}, #{address}, #{telephone}, #{email}, #{dept_id});
     </insert>
 
     <update id="updateEmployee" parameterType="com.bean.Employee">

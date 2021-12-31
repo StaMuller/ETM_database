@@ -1,7 +1,6 @@
 package com.operation;
 
-import com.bean.Department;
-import com.mapper.*;
+import com.mapper.DepartmentMapper;
 import com.utils.MybatisUtils;
 import org.apache.ibatis.session.SqlSession;
 

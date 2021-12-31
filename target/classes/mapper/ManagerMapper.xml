@@ -30,8 +30,8 @@
 
     <update id="transDept">
         update employee
-        set dept = #{deptId}
-        where id = #{employeeId};
+        set dept_id = #{deptId}
+        where employee_id = #{employeeId};
     </update>
 
     <select id="queryTakesOfCourse" resultType="com.bean.Takes" parameterType="java.lang.Long">
@@ -54,7 +54,7 @@
             takes
         where state = "不通过" and course_id = #{courseId}
         group by employee_id
-        having count(takes.id) > #{notPassedTime};
+        having count(takes.id) = #{notPassedTime};
     </select>
 
     <select id="findManagerById" parameterType="java.lang.Long" resultType="com.bean.Manager">

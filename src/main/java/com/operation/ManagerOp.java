@@ -115,14 +115,13 @@ public class ManagerOp {
     }
 
     // manager (6 根据考试的次数定向查找某门课程未通过指定次数的员工信息
-    // 返回map的key: course_id, employee_id, count(id)
+    // 返回map的key: course_id, employee_id, count(id) mapper.get("count(id)")
     public List<HashMap<String, Object>> queryNotPassed(Long courseId, int notPassedTime){
         return managerMapper.queryNotPassed(courseId, notPassedTime);
     }
 
     // manager (7 查询本部门下符合转部门条件的员工
     // 参数为本部门号
-    // 可转条件为通过了所有被分配的课程
     public List<Employee> queryTransEmployee(int deptId){
         List<Employee> transEmployee = new ArrayList<>();
         List<Employee> employeeList = managerMapper.findManagedEmployee(deptId);

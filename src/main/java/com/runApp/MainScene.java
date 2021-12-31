@@ -1,6 +1,7 @@
 package com.runApp;
 
 import com.bean.Employee;
+import com.operation.AdministratorOp;
 import com.operation.EmployeeOp;
 import com.operation.InstructorOp;
 import com.operation.ManagerOp;
@@ -20,10 +21,12 @@ public class MainScene extends Application {
     InstructorScene instructorScene = new InstructorScene();
     EmployeeScene employeeScene = new EmployeeScene();
     ManagerScene managerScene = new ManagerScene();
+    AdministratorScene administratorScene = new AdministratorScene();
 
     InstructorOp instructorOp = new InstructorOp();
     EmployeeOp employeeOp = new EmployeeOp();
     ManagerOp managerOp = new ManagerOp();
+    AdministratorOp administratorOp = new AdministratorOp();
     @Override
     public void start(Stage primaryStage) {
         Group root = new Group();
@@ -132,32 +135,21 @@ public class MainScene extends Application {
                 exception.printStackTrace();
             }
         });
-//            try{
-//
-////                List<Employee> employeeList = managerOp.findManagedEmployee(Integer.parseInt(id_area.getText()));
-//                if(employee == null){
-//                    new Alert(Alert.AlertType.NONE, "不存在该员工号", new ButtonType[]{ButtonType.CLOSE}).show();
-//                }else{
 
-
-
-
-
-
-
-
-
-//                    for (Employee employee : employeeList){
-//                        primaryStage.setScene(managerScene.setManager(employeeList, primaryStage, scene));
-//                }
-
-//                }
-//            } catch (NumberFormatException exception){
-//                new Alert(Alert.AlertType.NONE, "请填写相应员工号", new ButtonType[]{ButtonType.CLOSE}).show();
-//            } catch (Exception exception){
-//                exception.printStackTrace();
-//            }
-//        });
+        administratorButton.setOnMouseClicked(e ->{
+            try{
+                Employee administrator = administratorOp.getAdminById(Long.parseLong(id_area.getText()));
+                if(administrator == null){
+                    new Alert(Alert.AlertType.NONE, "该员工号无法使用该权限", new ButtonType[]{ButtonType.CLOSE}).show();
+                }else{
+                    primaryStage.setScene(administratorScene.setAdministrator(administrator, primaryStage, scene));
+                }
+            } catch (NumberFormatException exception){
+                new Alert(Alert.AlertType.NONE, "请填写相应员工号", new ButtonType[]{ButtonType.CLOSE}).show();
+            } catch (Exception exception){
+                exception.printStackTrace();
+            }
+        });
     }
 
 }
