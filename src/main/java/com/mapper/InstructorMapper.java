@@ -10,5 +10,5 @@ public interface InstructorMapper {
     Instructor getInstructorById(Long id);
     void deleteInstructor(Long id);
     List<Long> getInstructedEmployee(Long id);
-    void setScore(HashMap map);
+    void setScore(HashMap<String, Object> map);
 }

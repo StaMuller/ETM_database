@@ -10,4 +10,10 @@
         where dept_id = #{deptId};
     </select>
 
+    <select id="getDeptIdByName" resultType="int" parameterType="java.lang.String">
+        select dept_id
+        from department
+        where dept_name = #{deptName};
+    </select>
+
 </mapper>

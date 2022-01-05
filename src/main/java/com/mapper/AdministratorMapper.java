@@ -9,10 +9,9 @@ import java.util.List;
 public interface AdministratorMapper extends BaseMapper<Administrator> {
     Administrator getAdministratorById(Long id);
     void addEmployee(Employee employee);
-    void updateEmployee(Employee employee);
-    List<Employee> searchEmployee(String searchString);
     void updateCourse(Course course);
-    List<Course> searchCourse(String searchString);
-    List<Log> queryLog(String searchString);
+    List<Course> queryAllCourse();
+    List<Log> queryAllLog();
     void addLog(Log log);
+    List<Employee> queryAllEmployee();
 }

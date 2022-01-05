@@ -83,7 +83,6 @@ public class MainScene extends Application {
         employeeButton.setPrefWidth(120);
         employeeButton.setFont(button);
         root.getChildren().add(employeeButton);
-
         final Button administratorButton = new Button("系统管理员");
         administratorButton.setLayoutX(800);
         administratorButton.setLayoutY(300);

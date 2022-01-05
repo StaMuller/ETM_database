@@ -41,12 +41,13 @@
 
     <select id="getCourse" resultType="com.bean.Course" parameterType="java.lang.Long">
         select *
-        from
-        course
-        where state = 0 and course_id =
-        any (select course_id
-        from takes
-        where employee_id = #{id});
+        from course
+        where state = 0
+          and course_id = any (
+            select course_id
+            from takes
+            where employee_id = #{id}
+            );
     </select>
 
     <select id="getScore" resultType="com.bean.Takes" parameterType="java.lang.Long">

@@ -77,43 +77,43 @@ public class EmployeeScene {
         person.setLayoutX(180);
         person.setLayoutY(120);
         // 设置列
-        TableColumn<EmployeeView, String> tableColumnID = new TableColumn<>("id");
+        TableColumn<EmployeeView, String> tableColumnID = new TableColumn<>("员工号");
         tableColumnID.setCellValueFactory(new PropertyValueFactory<>("id"));
-        TableColumn<EmployeeView, String> tableColumnName = new TableColumn<>("name");
+        TableColumn<EmployeeView, String> tableColumnName = new TableColumn<>("姓名");
         tableColumnName.setCellValueFactory(new PropertyValueFactory<>("name"));
         tableColumnName.setCellFactory(TextFieldTableCell.forTableColumn());
         tableColumnName.setOnEditCommit(
                 (TableColumn.CellEditEvent<EmployeeView, String> t) -> t.getTableView().getItems().get(
                         t.getTablePosition().getRow()).setName(t.getNewValue()));
-        TableColumn<EmployeeView, String> tableColumnGender = new TableColumn<>("gender");
+        TableColumn<EmployeeView, String> tableColumnGender = new TableColumn<>("性别");
         tableColumnGender.setCellValueFactory(new PropertyValueFactory<>("gender"));
-        TableColumn<EmployeeView, String> tableColumnTime = new TableColumn<>("time");
+        TableColumn<EmployeeView, String> tableColumnTime = new TableColumn<>("入职时间");
         tableColumnTime.setCellValueFactory(new PropertyValueFactory<>("time"));
-        TableColumn<EmployeeView, Integer> tableColumnAge = new TableColumn<>("age");
+        TableColumn<EmployeeView, Integer> tableColumnAge = new TableColumn<>("年龄");
         tableColumnAge.setCellValueFactory(new PropertyValueFactory<>("age"));
         tableColumnAge.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
         tableColumnAge.setOnEditCommit(
                 (TableColumn.CellEditEvent<EmployeeView, Integer> t) -> t.getTableView().getItems().get(
                         t.getTablePosition().getRow()).setAge(t.getNewValue()));
-        TableColumn<EmployeeView, String> tableColumnAddress = new TableColumn<>("address");
+        TableColumn<EmployeeView, String> tableColumnAddress = new TableColumn<>("住址");
         tableColumnAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
         tableColumnAddress.setCellFactory(TextFieldTableCell.forTableColumn());
         tableColumnAddress.setOnEditCommit(
                 (TableColumn.CellEditEvent<EmployeeView, String> t) -> t.getTableView().getItems().get(
                         t.getTablePosition().getRow()).setAddress(t.getNewValue()));
-        TableColumn<EmployeeView, Long> tableColumnTelephone = new TableColumn<>("telephone");
+        TableColumn<EmployeeView, Long> tableColumnTelephone = new TableColumn<>("联系电话");
         tableColumnTelephone.setCellValueFactory(new PropertyValueFactory<>("telephone"));
         tableColumnTelephone.setCellFactory(TextFieldTableCell.forTableColumn(new LongStringConverter()));
         tableColumnTelephone.setOnEditCommit(
                 (TableColumn.CellEditEvent<EmployeeView, Long> t) -> t.getTableView().getItems().get(
                         t.getTablePosition().getRow()).setTelephone(t.getNewValue()));
-        TableColumn<EmployeeView, String> tableColumnEmail = new TableColumn<>("email");
+        TableColumn<EmployeeView, String> tableColumnEmail = new TableColumn<>("邮箱");
         tableColumnEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
         tableColumnEmail.setCellFactory(TextFieldTableCell.forTableColumn());
         tableColumnEmail.setOnEditCommit(
                 (TableColumn.CellEditEvent<EmployeeView, String> t) -> t.getTableView().getItems().get(
                         t.getTablePosition().getRow()).setEmail(t.getNewValue()));
-        TableColumn<EmployeeView, Integer> tableColumnDept = new TableColumn<>("dept");
+        TableColumn<EmployeeView, String> tableColumnDept = new TableColumn<>("所在部门");
         tableColumnDept.setCellValueFactory(new PropertyValueFactory<>("dept"));
         person.setItems(data);
         person.getColumns().addAll(tableColumnID, tableColumnName, tableColumnGender, tableColumnAge,
@@ -139,6 +139,7 @@ public class EmployeeScene {
             temp.setEmail(data.get(0).getEmail());
             temp.setDept(employee.getDept());
             employeeOp.reviseInfo(temp);
+            new Alert(Alert.AlertType.NONE, "修改成功", new ButtonType[]{ButtonType.CLOSE}).show();
         });
 
         // 查看被分配的课程与教员信息
@@ -157,24 +158,27 @@ public class EmployeeScene {
         course_query.setLayoutY(250);
         course_query.setFont(button);
         root.getChildren().addAll(course_label, course_area, course_query);
-
         course_query.setOnMouseClicked(e -> {
-            StringBuilder showString = new StringBuilder("课程号 课程名 导师 课程类型 课程内容 结课状态\n");
             List<Course> courseList = employeeOp.findCourse(employee.getId());
-            for(Course course : courseList){
-                showString
-                        .append(course.getCourse_id()).append("   ")
-                        .append(course.getCourse_name()).append("   ")
-                        .append(employeeOp.getEmployeeById(course.getInstructor_id()).getName()).append("   ")
-                        .append(course.getType()).append("   ")
-                        .append(course.getContent()).append("   ");
-                if(course.getState() == 0){
-                    showString.append("未结课\n");
-                }else{
-                    showString.append("已结课\n");
+            if(courseList.size() != 0){
+                StringBuilder showString = new StringBuilder("课程号 课程名 导师 课程类型 课程内容 结课状态\n");
+                for(Course course : courseList){
+                    showString
+                            .append(course.getCourse_id()).append("   ")
+                            .append(course.getCourse_name()).append("   ")
+                            .append(employeeOp.getEmployeeById(course.getInstructor_id()).getName()).append("   ")
+                            .append(course.getType()).append("   ")
+                            .append(course.getContent()).append("   ");
+                    if(course.getState() == 0){
+                        showString.append("未结课\n");
+                    }else{
+                        showString.append("已结课\n");
+                    }
                 }
+                course_area.setText(showString.toString());
+            }else{
+                course_area.setText("暂无课程信息");
             }
-            course_area.setText(showString.toString());
         });
 
         // 查看历史培训信息
@@ -195,23 +199,20 @@ public class EmployeeScene {
         root.getChildren().addAll(score_label, score_area, score_query);
 
         score_query.setOnMouseClicked(e -> {
-            String showString = "";
+            StringBuilder showString = new StringBuilder("课程号 课程名 分数 通过情况 成绩录入时间\n");;
             List<Takes> takesList = employeeOp.findScore(employee.getId());
             for(Takes takes : takesList){
-                showString += (takes.getCourse_id() + "  " +
-                        courseOp.getCourseById(takes.getCourse_id()).getCourse_name() + "  "
-                        );
+                showString.append(takes.getCourse_id()).append("  ")
+                        .append(courseOp.getCourseById(takes.getCourse_id()).getCourse_name()).append("  ");
                 if(takes.getState() == null){
-                    showString += "未考试\n";
+                    showString.append("未考试\n");
                 }else{
-                    showString += (
-                            takes.getNumber() + "  " +
-                            takes.getState() + "  " +
-                            takes.getTime() + "\n"
-                    );
+                    showString.append(takes.getNumber()).append("  ")
+                            .append(takes.getState()).append("  ")
+                            .append(takes.getTime()).append("\n");
                 }
             }
-            score_area.setText(showString);
+            score_area.setText(showString.toString());
         });
 
         return scene;

@@ -45,7 +45,7 @@ public class InstructorTest {
             map.put("number",888);
             map.put("employee_id",Long.parseLong("10231106002"));
             map.put("course_id",Long.parseLong("35140"));
-        instructorOp.inputScore(map);
+        instructorOp.inputScore(map, Long.parseLong("10231106002"));
         System.out.println("打印九");
     }
 }

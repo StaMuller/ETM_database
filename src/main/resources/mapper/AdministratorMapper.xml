@@ -19,31 +19,8 @@
         insert into
             employee
         values
-            (#{id}, #{name}, #{gender}, #{age}, #{time}, #{address}, #{telephone}, #{email}, #{dept_id});
+            (#{id}, #{name}, #{gender}, #{age}, #{time}, #{address}, #{telephone}, #{email}, #{dept});
     </insert>
-
-    <update id="updateEmployee" parameterType="com.bean.Employee">
-        update
-            employee
-        set
-            name = #{name}, address = #{address}, telephone = #{telephone}, email = #{email}
-        where
-              id = #{id};
-    </update>
-
-    <select id="searchEmployee" parameterType="java.lang.String" resultType="com.bean.Employee">
-        select
-               *
-        from
-             employee
-        where
-            name like #{searchString}
-           or gender like #{searchString}
-           or age like #{searchString}
-           or address like #{searchString}
-           or telephone like #{searchString}
-           or email like #{searchString};
-    </select>
 
     <update id="updateCourse" parameterType="com.bean.Course">
         update
@@ -54,30 +31,6 @@
             course_id = #{course_id};
     </update>
 
-    <select id="searchCourse" parameterType="java.lang.String" resultType="com.bean.Course">
-        select
-            *
-        from
-            course
-        where
-            course_name like #{searchString}
-           or instructor_id like #{searchString}
-           or type like #{searchString}
-           or content like #{searchString}
-           or state like #{searchString};
-    </select>
-
-    <select id="queryLog" parameterType="java.lang.String" resultType="com.bean.Log">
-        select
-            *
-        from
-            log
-        where
-            a_id like #{searchString}
-           or operation like #{searchString}
-           or date like #{searchString};
-    </select>
-
     <insert id="addLog" parameterType="com.bean.Log">
         <selectKey keyProperty="log_id" order="AFTER" resultType="int">
             SELECT LAST_INSERT_ID() as log_id;
@@ -85,7 +38,22 @@
         insert into
             log
         values
-            (#{log_id}, #{a_id}, #{operation}, #{date});
+            (#{log_id}, #{employee_id}, #{operation}, #{date});
     </insert>
+
+    <select id="queryAllEmployee" resultType="com.bean.Employee">
+        select *
+        from employee;
+    </select>
+
+    <select id="queryAllCourse" resultType="com.bean.Course">
+        select *
+        from course;
+    </select>
+
+    <select id="queryAllLog" resultType="com.bean.Log">
+        select *
+        from log;
+    </select>
 
 </mapper>

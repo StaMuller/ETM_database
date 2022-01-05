@@ -1,6 +1,7 @@
 package com.runApp;
 
 import com.bean.Employee;
+import com.operation.DepartmentOp;
 import com.operation.InstructorOp;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -9,11 +10,13 @@ import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class InstructorScene {
 
     InstructorOp instructorOp = new InstructorOp();
+    DepartmentOp departmentOp = new DepartmentOp();
 
     public Scene setInstructor(Employee instructor, Stage primaryStage, Scene primaryScene) {
         Group root = new Group();
@@ -54,12 +57,25 @@ public class InstructorScene {
         teach_query.setLayoutY(118);
         teach_query.setFont(button);
         root.getChildren().addAll(teach_label, teach_area, teach_query);
-
         teach_query.setOnMouseClicked(e -> {
             List<Employee> employeeList = instructorOp.findInstructedEmployee(instructor.getId());
-            for(Employee employee : employeeList){
-//                System.out.println(employee);
-                teach_area.appendText(String.valueOf(employee));
+            if(employeeList == null){
+                teach_area.setText("无教授员工信息");
+            }else{
+                StringBuilder showString = new StringBuilder("员工号 员工名 性别 入职时间 地址 联系电话 邮箱地址 所在部门\n");
+                for(Employee employee : employeeList){
+                    showString.append(
+                            employee.getId()).append("  ")
+                            .append(employee.getName()).append("  ")
+                            .append(employee.getGender()).append("  ")
+                            .append(employee.getAge()).append("  ")
+                            .append(employee.getTime()).append("  ")
+                            .append(employee.getAddress()).append("  ")
+                            .append(employee.getTelephone()).append("  ")
+                            .append(employee.getEmail()).append("  ")
+                            .append(departmentOp.getDeptNameById(employee.getDept())).append("\n");
+                }
+                teach_area.setText(showString.toString());
             }
         });
 
@@ -99,7 +115,7 @@ public class InstructorScene {
         grade_area3.setPrefHeight(10);
         grade_area3.setWrapText(true);
         root.getChildren().addAll(grade_label, grade_label1, grade_label2, grade_label3,
-                grade_area1, grade_area2, grade_area3);
+                                  grade_area1, grade_area2, grade_area3);
         final Button insert_grade = new Button("录入");
         insert_grade.setLayoutX(800);
         insert_grade.setLayoutY(480);
@@ -107,7 +123,18 @@ public class InstructorScene {
         root.getChildren().addAll(insert_grade);
 
         insert_grade.setOnMouseClicked(e ->{
-            // 录入成绩
+            String employeeId = grade_area1.getText();
+            String courseId = grade_area2.getText();
+            int number = Integer.parseInt(grade_area3.getText());
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("employeeId", employeeId);
+            map.put("courseId", courseId);
+            map.put("number", number);
+            if(instructorOp.inputScore(map, instructor.getId())){
+                new Alert(Alert.AlertType.NONE, "录入成功", new ButtonType[]{ButtonType.CLOSE}).show();
+            }else{
+                new Alert(Alert.AlertType.NONE, "录入失败\n可能原因：您无权限导入该成绩\n或该员工没有无成绩的该课程信息", new ButtonType[]{ButtonType.CLOSE}).show();
+            }
         });
 
         return scene;

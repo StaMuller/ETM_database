@@ -25,7 +25,7 @@ public class ManagerOp {
     TakesOp takesOp = new TakesOp();
     CourseOp courseOp = new CourseOp();
 
-//获取管理员id
+    // 获取管理员id
     public Employee getManagerById(Long employeeId){
         if(managerMapper.findManagerById(employeeId) == null){
             return null;
@@ -40,25 +40,37 @@ public class ManagerOp {
     }
 
     // manager (2   根据员工号为员工分配培训课程
-    public void addCourseById(Long courseId, Long employeeId){
+    public boolean addCourseById(Long courseId, Long employeeId){
+        if(employeeMapper.getEmployeeById(employeeId) == null || courseMapper.getCourseById(courseId) == null){
+            return false;
+        }
         Takes takes = new Takes();
         takes.setEmployee_id(employeeId);
         takes.setCourse_id(courseId);
         managerMapper.addCourse(takes);
         sqlSession.commit();
+        return true;
     }
 
     // manager (2    根据姓名为员工分配培训课程
-    public void addCourseByName(Long courseId, String name){
+    public int addCourseByName(Long courseId, String name){
         // 首先找到对应员工的ID
         List<Employee> employeeList = employeeMapper.getEmployeeByName(name);
-        for(Employee employee : employeeList){
+        if(courseMapper.getCourseById(courseId) == null){
+            return 0;
+        }
+        if(employeeList.size() == 1){
             Takes takes = new Takes();
             takes.setCourse_id(courseId);
-            takes.setEmployee_id(employee.getId());
+            takes.setEmployee_id(employeeList.get(0).getId());
             managerMapper.addCourse(takes);
+            sqlSession.commit();
+            return 1;
+        }else if(employeeList.size() == 0){
+            return 0;
+        }else{
+            return 2;
         }
-        sqlSession.commit();
     }
 
     // manager (3   根据姓名或员工号查询员工的培训成绩
@@ -70,6 +82,9 @@ public class ManagerOp {
     public List<Takes> queryTakesByName(String name){
         List<Takes> takesResult = new ArrayList<>();
         List<Employee> employeeList = employeeMapper.getEmployeeByName(name);
+        if(employeeList.size() == 0){
+            return null;
+        }
         for(Employee employee : employeeList){
             takesResult.addAll(managerMapper.queryTakesOfEmployee(employee.getId()));
         }
@@ -79,6 +94,9 @@ public class ManagerOp {
     // manager (4 将自己部门下的员工转入到其他部门
     public boolean transDeptById(Long employeeId, int deptId){
         // 是否满足转部门条件
+        if(employeeMapper.getEmployeeById(employeeId) == null){
+            return false;
+        }
         if(takesOp.trans(employeeId)){
             managerMapper.transDept(employeeId, deptId);
             sqlSession.commit();

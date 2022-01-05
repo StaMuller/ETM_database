@@ -16,7 +16,7 @@ import java.sql.Timestamp;
 public class Log {
     @TableId(value = "log_id", type = IdType.AUTO)
     private int log_id;
-    private long a_id;
+    private long employee_id;
     private String operation;
     private Timestamp date;
 }

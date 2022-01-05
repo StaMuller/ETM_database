@@ -48,9 +48,7 @@ public class TransScene {
         title_label.setLayoutY(30);
         title_label.setFont(title);
         root.getChildren().add(title_label);
-
         Font area = new Font("楷体", 15);
-
         final TextArea manage_area = new TextArea();
         manage_area.setLayoutX(50);
         manage_area.setLayoutY(155);
@@ -59,23 +57,19 @@ public class TransScene {
         manage_area.setWrapText(true);
         root.getChildren().addAll(manage_area);
 
-
-        //查询本部门符合转部门条件的员工
+        // 查询本部门符合转部门条件的员工
         final Button query_trans = new Button("查询本部门符合转部门条件的员工");
         query_trans.setLayoutX(50);
         query_trans.setLayoutY(100);
         query_trans.setFont(button);
         root.getChildren().addAll(query_trans);
-
-        //查询本部门符合转部门条件的员工
         query_trans.setOnMouseClicked(e -> {
             try{
-//                直接获取员工部门号
                 List<Employee> employeeList = managerOp.queryTransEmployee(manager.getDept());
                 if (employeeList == null){
-                    new Alert(Alert.AlertType.NONE, "没有查询到结果", new ButtonType[]{ButtonType.CLOSE}).show();
+                    manage_area.setText("本部门下无符合转部门条件的员工");
                 }else{
-                    StringBuilder showString = new StringBuilder();
+                    StringBuilder showString = new StringBuilder("员工号 员工名 性别 入职时间 地址 联系电话 邮箱地址 所在部门\n");
                     for(Employee employee : employeeList){
                         showString.append(
                                 employee.getId()).append("  ")
@@ -90,26 +84,22 @@ public class TransScene {
                     }
                     manage_area.setText(showString.toString());
                 }
-            } catch (NumberFormatException exception){
-                new Alert(Alert.AlertType.NONE, "请填写相应员工号/姓名", new ButtonType[]{ButtonType.CLOSE}).show();
             } catch (Exception exception){
                 exception.printStackTrace();
             }
-
         });
 
-//查询转部门后要上的课
+        // 查询转部门后要上的课
         final Label trans_label = new Label("员工号/姓名");
         trans_label.setLayoutX(330);
         trans_label.setLayoutY(100);
         trans_label.setFont(area);
         final TextArea trans_area = new TextArea();
-        trans_area.setLayoutX(430);//员工号/姓名/员工姓名
+        trans_area.setLayoutX(430);
         trans_area.setLayoutY(100);
         trans_area.setPrefWidth(150);
         trans_area.setPrefHeight(10);
         trans_area.setWrapText(true);
-
         final Label wanted_dept = new Label("意向部门");
         wanted_dept.setLayoutX(610);
         wanted_dept.setLayoutY(100);
@@ -120,81 +110,113 @@ public class TransScene {
         wanted_area.setPrefWidth(100);
         wanted_area.setPrefHeight(10);
         wanted_area.setWrapText(true);
-//查询需要培训的课程
         final Button query_course = new Button("查询需要培训的课程");
         query_course.setLayoutX(810);
         query_course.setLayoutY(100);
         query_course.setFont(button);
         root.getChildren().addAll(trans_label,trans_area,wanted_dept,wanted_area,query_course);
-
         query_course.setOnMouseClicked(e -> {
             try{
                 String employeeId = trans_area.getText();
                 String deptId = wanted_area.getText();
-                List<Course> courseList = managerOp.courseAfterTransById(Long.parseLong(employeeId),Integer.parseInt(deptId));
-                StringBuilder showString = new StringBuilder("课程号 课程名 \n");
-                for(Course course : courseList) {
-                    showString.append(course.getCourse_id()).append("  ")
-                            .append(courseOp.getCourseById(course.getCourse_id()).getCourse_name()).append("  ")
-                            .append("\n");
+                if(employeeId.charAt(0) >= '0' && employeeId.charAt(0) <= '9'){
+                    List<Course> courseList = managerOp.courseAfterTransById(Long.parseLong(employeeId),Integer.parseInt(deptId));
+                    StringBuilder showString = new StringBuilder("课程号 课程名 \n");
+                    for(Course course : courseList) {
+                        showString.append(course.getCourse_id()).append("  ")
+                                .append(courseOp.getCourseById(course.getCourse_id()).getCourse_name()).append("  ")
+                                .append("\n");
+                    }
+                    manage_area.setText(showString.toString());
+                }else{
+                    StringBuilder showString = new StringBuilder("课程号 课程名 \n");
+                    List<Employee> employeeList = employeeOp.getEmployeeByName(employeeId);
+                    if(employeeList.size() > 1){
+                        showString.append("\n");
+                    }
+                    for(Employee employee : employeeList){
+                        if(employeeList.size() > 1){
+                            showString.append(employee.getName()).append(" 的查询信息\n");
+                        }
+                        List<Course> courseList = managerOp.courseAfterTransById(employee.getId(),Integer.parseInt(deptId));
+                        for(Course course : courseList) {
+                            showString.append(course.getCourse_id()).append("  ")
+                                    .append(courseOp.getCourseById(course.getCourse_id()).getCourse_name()).append("  ")
+                                    .append("\n");
+                        }
+                    }
+                    manage_area.setText(showString.toString());
                 }
-                manage_area.setText(showString.toString());
             } catch (NumberFormatException exception){
                 new Alert(Alert.AlertType.NONE, "请填写相应员工号/姓名", new ButtonType[]{ButtonType.CLOSE}).show();
             } catch (Exception exception){
                 exception.printStackTrace();
             }
-
         });
 
-
-//执行转部门操作
+        // 执行转部门操作
         final Label trans_label1 = new Label("部门号");
-        trans_label1.setLayoutX(330);//380
+        trans_label1.setLayoutX(330);
         trans_label1.setLayoutY(480);
         trans_label1.setFont(area);
-//        部门号
         final TextArea trans_area1 = new TextArea();
         trans_area1.setLayoutX(390);
         trans_area1.setLayoutY(480);
         trans_area1.setPrefWidth(100);
         trans_area1.setPrefHeight(10);
         trans_area1.setWrapText(true);
-
         final Label trans_label2 = new Label("员工号/姓名");
         trans_label2.setLayoutX(50);
         trans_label2.setLayoutY(480);
         trans_label2.setFont(area);
         final TextArea trans_area2 = new TextArea();
-        trans_area2.setLayoutX(150);//员工号/姓名/员工姓名
+        trans_area2.setLayoutX(150);
         trans_area2.setLayoutY(480);
         trans_area2.setPrefWidth(150);
         trans_area2.setPrefHeight(10);
         trans_area2.setWrapText(true);
-
-
-//转部门按钮
         final Button trans_op = new Button("转部门");
         trans_op.setLayoutX(500);
         trans_op.setLayoutY(480);
         trans_op.setFont(button);
         root.getChildren().addAll(trans_op);
-
         root.getChildren().addAll(trans_label1,trans_label2,trans_area2,trans_area1);
-
 
         trans_op.setOnMouseClicked(e -> {
             try{
                 String employeeId = trans_area2.getText();
                 String deptId = trans_area1.getText();
-                System.out.println("employeeId"+employeeId);
-                System.out.println("deptId"+deptId);
-//                flag:是否转部门成功
-                Boolean flag = managerOp.transDeptById(Long.parseLong(employeeId),Integer.parseInt(deptId));
-                if (flag){
-                    new Alert(Alert.AlertType.NONE, "转部门成功", new ButtonType[]{ButtonType.CLOSE}).show();
+                if(employeeId.charAt(0) >= '0' && employeeId.charAt(0) <= '9'){
+                    // 员工号
+                    if(employeeOp.getEmployeeById(Long.parseLong(employeeId)).getDept() == manager.getDept()){
+                        boolean flag = managerOp.transDeptById(Long.parseLong(employeeId),Integer.parseInt(deptId));
+                        if (flag){
+                            new Alert(Alert.AlertType.NONE, "转部门成功", new ButtonType[]{ButtonType.CLOSE}).show();
+                        }else{
+                            new Alert(Alert.AlertType.NONE, "转部门失败", new ButtonType[]{ButtonType.CLOSE}).show();
+                        }
+                    }else{
+                        new Alert(Alert.AlertType.NONE, "无权限操作，该员工不属于您管理的部门", new ButtonType[]{ButtonType.CLOSE}).show();
+                    }
                 }else{
-                    new Alert(Alert.AlertType.NONE, "转部门失败", new ButtonType[]{ButtonType.CLOSE}).show();
+                    // 员工姓名
+                    if(employeeOp.getEmployeeByName(employeeId).size() > 1){
+                        new Alert(Alert.AlertType.NONE, "查询到多名员工，请具体指定员工号", new ButtonType[]{ButtonType.CLOSE}).show();
+                    }else if(employeeOp.getEmployeeByName(employeeId).size() == 0){
+                        new Alert(Alert.AlertType.NONE, "查无此人", new ButtonType[]{ButtonType.CLOSE}).show();
+                    }else{
+                        Employee employee = employeeOp.getEmployeeByName(employeeId).get(0);
+                        if(employee.getDept() == manager.getDept()){
+                            int flag = managerOp.transDeptByName(employeeId, Integer.parseInt(deptId));
+                            if (flag == 0){
+                                new Alert(Alert.AlertType.NONE, "转部门成功", new ButtonType[]{ButtonType.CLOSE}).show();
+                            }else{
+                                new Alert(Alert.AlertType.NONE, "该员工不符合转部门要求", new ButtonType[]{ButtonType.CLOSE}).show();
+                            }
+                        }else{
+                            new Alert(Alert.AlertType.NONE, "无权限操作，该员工不属于您管理的部门", new ButtonType[]{ButtonType.CLOSE}).show();
+                        }
+                    }
                 }
             } catch (NumberFormatException exception){
                 new Alert(Alert.AlertType.NONE, "请填写相应员工号/姓名", new ButtonType[]{ButtonType.CLOSE}).show();
@@ -203,18 +225,17 @@ public class TransScene {
             }
         });
 
-
+        // 查询员工是否符合转部门要求
         final Label trans_label3 = new Label("员工号/姓名");
         trans_label3.setLayoutX(50);
         trans_label3.setLayoutY(430);
         trans_label3.setFont(area);
         final TextArea trans_area3 = new TextArea();
-        trans_area3.setLayoutX(150);//员工号/姓名/员工姓名
+        trans_area3.setLayoutX(150);
         trans_area3.setLayoutY(430);
         trans_area3.setPrefWidth(150);
         trans_area3.setPrefHeight(10);
         trans_area3.setWrapText(true);
-
         final Button single_query = new Button("查询是否可以转部门");
         single_query.setLayoutX(350);
         single_query.setLayoutY(430);
@@ -223,17 +244,33 @@ public class TransScene {
         single_query.setOnMouseClicked(e -> {
             try{
                 String employeeId = trans_area3.getText();
-                if(managerOp.employeeTransById(Long.parseLong(employeeId))){
-                    new Alert(Alert.AlertType.NONE, "满足转部门条件", new ButtonType[]{ButtonType.CLOSE}).show();
+                if(employeeId.charAt(0) >= '0' && employeeId.charAt(0) <= '9'){
+                    // 员工号
+                    if(managerOp.employeeTransById(Long.parseLong(employeeId))){
+                        manage_area.setText(employeeOp.getEmployeeById(Long.parseLong(employeeId)).getName()
+                                + " 符合转部门要求");
+                    }else{
+                        manage_area.setText(employeeOp.getEmployeeById(Long.parseLong(employeeId)).getName()
+                                + " 不符合转部门要求");
+                    }
                 }else{
-                    new Alert(Alert.AlertType.NONE, "不满足转部门条件", new ButtonType[]{ButtonType.CLOSE}).show();
-                };
+                    // 员工姓名
+                    StringBuilder showString = new StringBuilder();
+                    List<Employee> employeeList = employeeOp.getEmployeeByName(employeeId);
+                    for(Employee employee : employeeList){
+                        if(managerOp.employeeTransById(employee.getId())){
+                            showString.append(employee.getName()).append(" 符合转部门要求\n");
+                        }else{
+                            showString.append(employee.getName()).append(" 不符合转部门要求\n");
+                        }
+                    }
+                    manage_area.setText(showString.toString());
+                }
             } catch (NumberFormatException exception){
                 new Alert(Alert.AlertType.NONE, "请填写相应员工号/姓名", new ButtonType[]{ButtonType.CLOSE}).show();
             } catch (Exception exception){
                 exception.printStackTrace();
             }
-
         });
 
 
