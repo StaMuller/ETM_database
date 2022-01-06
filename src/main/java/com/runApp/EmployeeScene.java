@@ -199,7 +199,7 @@ public class EmployeeScene {
         root.getChildren().addAll(score_label, score_area, score_query);
 
         score_query.setOnMouseClicked(e -> {
-            StringBuilder showString = new StringBuilder("课程号 课程名 分数 通过情况 成绩录入时间\n");;
+            StringBuilder showString = new StringBuilder("课程号 课程名 分数 通过情况 成绩录入时间\n");
             List<Takes> takesList = employeeOp.findScore(employee.getId());
             for(Takes takes : takesList){
                 showString.append(takes.getCourse_id()).append("  ")
@@ -208,8 +208,10 @@ public class EmployeeScene {
                     showString.append("未考试\n");
                 }else{
                     showString.append(takes.getNumber()).append("  ")
-                            .append(takes.getState()).append("  ")
-                            .append(takes.getTime()).append("\n");
+                            .append(takes.getState()).append("  ");
+                    if (takes.getTime()==null){
+                        showString.append("").append("\n");
+                    }
                 }
             }
             score_area.setText(showString.toString());

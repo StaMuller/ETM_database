@@ -1,5 +1,6 @@
 package com.runApp;
 
+import com.bean.Course;
 import com.bean.Employee;
 import com.bean.Takes;
 import com.operation.DepartmentOp;
@@ -57,11 +58,15 @@ public class ManagerScene {
         manage_area.setPrefWidth(1100);
         manage_area.setPrefHeight(250);
         manage_area.setWrapText(true);
-        final Button manage_query = new Button("查询");
+        final Button manage_query = new Button("查询员工基本信息");
         manage_query.setLayoutX(180);
         manage_query.setLayoutY(118);
         manage_query.setFont(button);
-        root.getChildren().addAll(manage_label, manage_area, manage_query);
+        final Button course_query = new Button("查询员工课程信息");
+        course_query.setLayoutX(310);
+        course_query.setLayoutY(118);
+        course_query.setFont(button);
+        root.getChildren().addAll(manage_label, manage_area, manage_query,course_query);
 
         manage_query.setOnMouseClicked(e -> {
             try{
@@ -69,39 +74,83 @@ public class ManagerScene {
                 if (managedEmployee == null){
                     new Alert(Alert.AlertType.NONE, "没有查询到结果", new ButtonType[]{ButtonType.CLOSE}).show();
                 }else{
-                    StringBuilder showString = new StringBuilder("员工号 员工名 性别 入职时间 地址 联系电话 邮箱地址 所在部门\n");
-                    for(Employee employee : managedEmployee){
-                        showString.append(
-                                employee.getId()).append("  ")
-                                .append(employee.getName()).append("  ")
-                                .append(employee.getGender()).append("  ")
-                                .append(employee.getAge()).append("  ")
-                                .append(employee.getTime()).append("  ")
-                                .append(employee.getAddress()).append("  ")
-                                .append(employee.getTelephone()).append("  ")
-                                .append(employee.getEmail()).append("  ")
-                                .append(departmentOp.getDeptNameById(employee.getDept()))
-                                .append("\n");
-                        List<Takes> takesList = employeeOp.getTakes(employee.getId());
-                        if(takesList.size() != 0){
-                            showString.append("课程号 课程名 导师 课程类型 课程内容 结课状态\n");
-                            for(Takes takes : takesList){
-                                showString.append(takes.getCourse_id()).append("  ")
-                                        .append(takes.getNumber()).append("  ")
-                                        .append(takes.getState()).append("  ")
-                                        .append(takes.getTime()).append("  ")
-                                        .append("\n");
-                            }
-                        }
+                    StringBuilder showString = new StringBuilder();
+                    showString.append(String.format("%-18s","员工号")).append("\t")
+                            .append(String.format("%-20s","员工名")).append("\t")
+                            .append(String.format("%-8s","性别")).append("\t")
+                            .append(String.format("%-4s","年龄")).append("\t")
+                            .append(String.format("%-45s","入职时间")).append("\t")
+                            .append(String.format("%-20s","地址")).append("\t")
+                            .append(String.format("%-30s","联系电话")).append("\t")
+                            .append(String.format("%-40s","邮箱地址")).append("\t")
+                            .append(String.format("%-6s","所在部门")).append("\t").append("\n");
+
+
+                    for(Employee employee : managedEmployee) {
+                        showString.append(String.format("%-18s", employee.getId())).append("\t")
+                                .append(String.format("%-20s",employee.getName())).append("\t")
+                                .append(String.format("%-8s",employee.getGender())).append("\t")
+                                .append(String.format("%-4s",employee.getAge())).append("\t")
+                                .append(String.format("%-45s",employee.getTime())).append("\t")
+                                .append(String.format("%-20s",employee.getAddress())).append("\t")
+                                .append(String.format("%-30s",employee.getTelephone())).append("\t")
+                                .append(String.format("%-40s",employee.getEmail())).append("\t")
+                                .append(String.format("%-6s",departmentOp.getDeptNameById(employee.getDept()))).append("\n");
                     }
-                    manage_area.setText(showString.toString());
-                }
+                    manage_area.setText(String.valueOf(showString));
+                    }
             } catch (NumberFormatException exception){
                 new Alert(Alert.AlertType.NONE, "请填写相应员工号", new ButtonType[]{ButtonType.CLOSE}).show();
             } catch (Exception exception){
                 exception.printStackTrace();
             }
 
+        });
+
+        course_query.setOnMouseClicked(e->{
+            try{
+                List<Employee> managedEmployee = managerOp.findManagedEmployee(manager.getDept());
+                if (managedEmployee == null){
+                    new Alert(Alert.AlertType.NONE, "没有查询到结果", new ButtonType[]{ButtonType.CLOSE}).show();
+                }else{
+                    StringBuilder showString = new StringBuilder();
+                    showString.append(String.format("%-18s","员工号")).append("\t")
+                            .append(String.format("%-20s","员工名")).append("\t")
+                            .append(String.format("%-12s","课程号")).append("\t")
+                            .append(String.format("%-18s","课程名")).append("\t")
+                            .append(String.format("%-24s","导师")).append("\t")
+                            .append(String.format("%-12s","课程类型")).append("\t")
+                            .append(String.format("%-12s","课程内容")).append("\t")
+                            .append(String.format("%-12s","结课状态")).append("\t").append("\n");
+
+                    for(Employee employee : managedEmployee) {
+                        List<Course> courseList = employeeOp.findCourse(employee.getId());
+                        if(courseList.size() != 0){
+                            for(Course takes : courseList){
+                                showString.append(String.format("%-18s", employee.getId())).append("\t")
+                                        .append(String.format("%-20s",employee.getName())).append("\t")
+                                        .append(String.format("%-18s",takes.getCourse_id())).append("\t")
+                                        .append(String.format("%-20s",takes.getCourse_name())).append("\t")
+                                        .append(String.format("%-18s",takes.getInstructor_id())).append("\t")
+                                        .append(String.format("%-18s",takes.getType())).append("\t")
+                                        .append(String.format("%-16s",takes.getContent())).append("\t");
+                                if(takes.getState() == 0){
+                                    showString.append(String.format("%-18s","未结课")).append("\t");
+                                }else{
+                                    showString.append(String.format("%-18s","已结课")).append("\t");
+                                }
+                                showString.append("\n");
+                            }
+                        }
+                        showString.append("\n");
+                    }
+                    manage_area.setText(String.valueOf(showString));
+                }
+            } catch (NumberFormatException exception){
+                new Alert(Alert.AlertType.NONE, "请填写相应员工号", new ButtonType[]{ButtonType.CLOSE}).show();
+            } catch (Exception exception){
+                exception.printStackTrace();
+            }
         });
 
         // 2）执行分配课程操作
@@ -140,19 +189,33 @@ public class ManagerScene {
                 String courseId = course_area.getText();
                 if(employeeId.charAt(0) >= '0' && employeeId.charAt(0) <= '9'){
                     // 员工号
-                    if(managerOp.addCourseById(Long.parseLong(courseId), Long.parseLong(employeeId))){
-                        new Alert(Alert.AlertType.NONE, "分配课程成功", new ButtonType[]{ButtonType.CLOSE}).show();
+                    if(employeeOp.getEmployeeById(Long.parseLong(employeeId)).getDept() != manager.getDept()){
+                        new Alert(Alert.AlertType.NONE, "无权限操作", new ButtonType[]{ButtonType.CLOSE}).show();
                     }else{
-                        new Alert(Alert.AlertType.NONE, "该员工号或课程号不存在", new ButtonType[]{ButtonType.CLOSE}).show();
+                        if(managerOp.addCourseById(Long.parseLong(courseId), Long.parseLong(employeeId))){
+                            new Alert(Alert.AlertType.NONE, "分配课程成功", new ButtonType[]{ButtonType.CLOSE}).show();
+                        }else{
+                            new Alert(Alert.AlertType.NONE, "该员工号或课程号不存在", new ButtonType[]{ButtonType.CLOSE}).show();
+                        }
                     }
                 }else{
                     // 员工姓名
-                    if(managerOp.addCourseByName(Long.parseLong(courseId), employeeId) == 1){
-                        new Alert(Alert.AlertType.NONE, "分配课程成功", new ButtonType[]{ButtonType.CLOSE}).show();
-                    }else if(managerOp.addCourseByName(Long.parseLong(courseId), employeeId) == 0){
-                        new Alert(Alert.AlertType.NONE, "该员工或课程号不存在", new ButtonType[]{ButtonType.CLOSE}).show();
-                    }else{
+                    List<Employee> employeeList = employeeOp.getEmployeeByName(employeeId);
+                    if(employeeList.size() > 1){
                         new Alert(Alert.AlertType.NONE, "查询到多员工，请指定员工号", new ButtonType[]{ButtonType.CLOSE}).show();
+                    }else{
+                        Employee employee = employeeList.get(0);
+                        if(employee.getDept() != manager.getDept()){
+                            new Alert(Alert.AlertType.NONE, "无权限操作", new ButtonType[]{ButtonType.CLOSE}).show();
+                        }else{
+                            if(managerOp.addCourseByName(Long.parseLong(courseId), employeeId) == 1){
+                                new Alert(Alert.AlertType.NONE, "分配课程成功", new ButtonType[]{ButtonType.CLOSE}).show();
+                            }else if(managerOp.addCourseByName(Long.parseLong(courseId), employeeId) == 0){
+                                new Alert(Alert.AlertType.NONE, "该员工或课程号不存在", new ButtonType[]{ButtonType.CLOSE}).show();
+                            }else{
+                                new Alert(Alert.AlertType.NONE, "查询到多员工，请指定员工号", new ButtonType[]{ButtonType.CLOSE}).show();
+                            }
+                        }
                     }
                 }
             } catch (NumberFormatException exception){

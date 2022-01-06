@@ -24,7 +24,7 @@ import java.util.Date;
 import java.util.List;
 
 public class EditEmployeeScene {
-
+    DetailsScene detailsScene = new DetailsScene();
     EmployeeOp employeeOp = new EmployeeOp();
     DepartmentOp departmentOp = new DepartmentOp();
     AdministratorOp administratorOp = new AdministratorOp();
@@ -137,8 +137,8 @@ public class EditEmployeeScene {
                 temp.setEmail(employeeView.getEmail());
                 temp.setDept(departmentOp.getDeptIdByName(employeeView.getDept()));
                 employeeOp.reviseInfo(temp);
-                new Alert(Alert.AlertType.NONE, "修改成功", new ButtonType[]{ButtonType.CLOSE}).show();
             }
+            new Alert(Alert.AlertType.NONE, "修改成功", new ButtonType[]{ButtonType.CLOSE}).show();
         });
 
         // 删除员工
@@ -171,6 +171,30 @@ public class EditEmployeeScene {
                 data.add(employeeView);
             }
             person.setItems(data);
+        });
+
+
+        // 查询用户的个人基本信息/培训成绩信息
+        final TextArea query_area = new TextArea();
+        query_area.setLayoutX(930);
+        query_area.setLayoutY(250);
+        query_area.setPrefWidth(100);
+        query_area.setPrefHeight(10);
+        query_area.setWrapText(true);
+        final Button query = new Button("查询员工信息");
+        query.setLayoutX(1050);
+        query.setLayoutY(250);
+        query.setMinHeight(30);
+        query.setMinWidth(70);
+        query.setFont(button);
+        root.getChildren().addAll(query_area, query);
+        query.setOnMouseClicked(e ->{
+            try{
+                Employee employee = employeeOp.getEmployeeById(Long.parseLong(query_area.getText()));
+                primaryStage.setScene(detailsScene.setEmployee(employee,primaryStage, scene));
+            }catch (Exception exception){
+                exception.printStackTrace();
+            }
         });
 
         // 增加员工

@@ -62,20 +62,31 @@ public class InstructorScene {
             if(employeeList == null){
                 teach_area.setText("无教授员工信息");
             }else{
-                StringBuilder showString = new StringBuilder("员工号 员工名 性别 入职时间 地址 联系电话 邮箱地址 所在部门\n");
-                for(Employee employee : employeeList){
-                    showString.append(
-                            employee.getId()).append("  ")
-                            .append(employee.getName()).append("  ")
-                            .append(employee.getGender()).append("  ")
-                            .append(employee.getAge()).append("  ")
-                            .append(employee.getTime()).append("  ")
-                            .append(employee.getAddress()).append("  ")
-                            .append(employee.getTelephone()).append("  ")
-                            .append(employee.getEmail()).append("  ")
-                            .append(departmentOp.getDeptNameById(employee.getDept())).append("\n");
+                StringBuilder showString = new StringBuilder();
+                showString.append(String.format("%-18s","员工号")).append("\t")
+                        .append(String.format("%-20s","员工名")).append("\t")
+                        .append(String.format("%-8s","性别")).append("\t")
+                        .append(String.format("%-4s","年龄")).append("\t")
+                        .append(String.format("%-45s","入职时间")).append("\t")
+                        .append(String.format("%-20s","地址")).append("\t")
+                        .append(String.format("%-38s","联系电话")).append("\t")
+                        .append(String.format("%-40s","邮箱地址")).append("\t")
+                        .append(String.format("%-6s","所在部门")).append("\t").append("\n");
+                teach_area.appendText(String.valueOf(showString));
+
+                for(Employee employee : employeeList) {
+                    StringBuilder temp = new StringBuilder();
+                    temp.append(String.format("%-18s", employee.getId())).append("\t")
+                            .append(String.format("%-20s",employee.getName())).append("\t")
+                            .append(String.format("%-8s",employee.getGender())).append("\t")
+                            .append(String.format("%-4s",employee.getAge())).append("\t")
+                            .append(String.format("%-45s",employee.getTime())).append("\t")
+                            .append(String.format("%-20s",employee.getAddress())).append("\t")
+                            .append(String.format("%-38s",employee.getTelephone())).append("\t")
+                            .append(String.format("%-40s",employee.getEmail())).append("\t")
+                            .append(String.format("%-6s",departmentOp.getDeptNameById(employee.getDept()))).append("\n");
+               teach_area.appendText(String.valueOf(temp));
                 }
-                teach_area.setText(showString.toString());
             }
         });
 

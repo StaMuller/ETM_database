@@ -37,8 +37,7 @@
     </select>
 
     <delete id="deleteInstructor" parameterType="java.lang.Long">
-        delete
-        from instructor
+        delete from instructor
         where id = #{id};
     </delete>
 

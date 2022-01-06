@@ -121,15 +121,15 @@ public class EditLogScene {
         add.setOnMouseClicked(e -> {
             Log log = newData.get(0);
             if(administratorOp.addLog(log.getEmployee_id(), log.getOperation())){
+                allLog.clear();
+                allLog.addAll(administratorOp.queryAllLog());
+                data.clear();
+                data.addAll(allLog);
+                Log.setItems(data);
                 new Alert(Alert.AlertType.NONE, "添加成功", new ButtonType[]{ButtonType.CLOSE}).show();
             }else{
                 new Alert(Alert.AlertType.NONE, "添加失败", new ButtonType[]{ButtonType.CLOSE}).show();
             }
-            allLog.clear();
-            allLog.addAll(administratorOp.queryAllLog());
-            data.clear();
-            data.addAll(allLog);
-            Log.setItems(data);
         });
         return scene;
     }

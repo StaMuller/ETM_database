@@ -112,18 +112,23 @@ public class ExamScene {
                 }else{
                     List<HashMap<String, Object>> takesList = managerOp.queryNotPassed(Long.parseLong(courseId), Integer.parseInt(num));
                     if(takesList.size() == 0){
-                        manage_area.appendText("无相关信息");
+                        manage_area.setText("无相关信息");
                     }else{
-                        StringBuilder showString = new StringBuilder("课程号 课程名 员工号 员工名 未通过次数\n");
+                        StringBuilder showString = new StringBuilder();
+                        showString.append(String.format("%-12s","课程号")).append("\t")
+                                .append(String.format("%-18s","课程名")).append("\t")
+                                .append(String.format("%-18s","员工号")).append("\t")
+                                .append(String.format("%-20s","员工名")).append("\t")
+                                .append(String.format("%-12s","未通过次数")).append("\t").append("\n");
                         for(HashMap<String, Object> takes : takesList){
-                            showString.append(takes.get("course_id")).append("  ")
-                                    .append(courseOp.getCourseById((Long) takes.get("course_id")).getCourse_name()).append("  ")
-                                    .append(takes.get("employee_id")).append("  ")
-                                    .append(employeeOp.getEmployeeById((Long) takes.get("employee_id"))).append("  ")
-                                    .append(takes.get("count(id)")).append("  ")
+                            showString.append(String.format("%-12s",takes.get("course_id"))).append("\t")
+                                    .append(String.format("%-18s",courseOp.getCourseById((Long) takes.get("course_id")).getCourse_name())).append("\t")
+                                    .append(String.format("%-18s",takes.get("employee_id"))).append("\t")
+                                    .append(String.format("%-20s",(employeeOp.getEmployeeById((Long)takes.get("employee_id"))).getName())).append("\t")
+                                    .append(String.format("%-12s",takes.get("count(id)"))).append("\t")
                                     .append("\n");
                         }
-                        manage_area.appendText(showString.toString());
+                        manage_area.setText(showString.toString());
                     }
                 }
             } catch (NumberFormatException exception){
@@ -146,16 +151,21 @@ public class ExamScene {
         passed_query.setOnMouseClicked(e -> {
             try{
                 List<Takes> takesList = managerOp.queryPassedTakes();
-                StringBuilder showString = new StringBuilder("课程号 课程名    考试成绩 通过状态 考试时间\n");
+                StringBuilder showString = new StringBuilder();
+                showString.append(String.format("%-12s","课程号")).append("\t")
+                        .append(String.format("%-18s","课程名")).append("\t")
+                        .append(String.format("%-18s","员工号")).append("\t")
+                        .append(String.format("%-20s","员工名")).append("\t")
+                        .append(String.format("%-12s","考试成绩")).append("\t").append("\n");
                 for(Takes takes : takesList){
-                    showString.append(takes.getCourse_id()).append("  ")
-                            .append(courseOp.getCourseById(takes.getCourse_id()).getCourse_name()).append("  ")
-                            .append(takes.getNumber()).append("  ")
-                            .append(takes.getState()).append("  ")
-                            .append(takes.getTime()).append("  ")
+                    showString.append(String.format("%-12s",takes.getCourse_id())).append("\t")
+                            .append(String.format("%-18s",courseOp.getCourseById(takes.getCourse_id()).getCourse_name())).append("\t")
+                            .append(String.format("%-18s",takes.getEmployee_id())).append("\t")
+                            .append(String.format("%-20s",(employeeOp.getEmployeeById((Long)takes.getEmployee_id())).getName())).append("\t")
+                            .append(String.format("%-12s",takes.getNumber())).append("\t")
                             .append("\n");
                 }
-                manage_area.appendText(showString.toString());
+                manage_area.setText(showString.toString());
             } catch (NumberFormatException exception){
                 new Alert(Alert.AlertType.NONE, "请填写相应员工号", new ButtonType[]{ButtonType.CLOSE}).show();
             } catch (Exception exception){
@@ -188,30 +198,64 @@ public class ExamScene {
                         new Alert(Alert.AlertType.NONE, "该员工不存在", new ButtonType[]{ButtonType.CLOSE}).show();
                     }else{
                         List<Takes> takesList = managerOp.queryTakesById(Long.parseLong(employeeId));
-                        StringBuilder showString = new StringBuilder("课程号 课程名 考试成绩 通过状态 考试时间\n");
+                        StringBuilder showString = new StringBuilder();
+                        showString.append(String.format("%-12s","课程号")).append("\t")
+                                .append(String.format("%-18s","课程名")).append("\t")
+                                .append(String.format("%-18s","员工号")).append("\t")
+                                .append(String.format("%-20s","员工名")).append("\t")
+                                .append(String.format("%-8s","考试成绩")).append("\t")
+                                .append(String.format("%-12s","通过状态")).append("\t")
+                                .append(String.format("%-20s","考试时间")).append("\t")
+                                .append("\n");
                         for(Takes takes : takesList){
-                            showString.append(takes.getCourse_id()).append("  ")
-                                    .append(courseOp.getCourseById(takes.getCourse_id()).getCourse_name()).append("  ")
-                                    .append(takes.getNumber()).append("  ")
-                                    .append(takes.getState()).append("  ")
-                                    .append(takes.getTime()).append("  ")
-                                    .append("\n");
+                            showString.append(String.format("%-12s",takes.getCourse_id())).append("\t")
+                                    .append(String.format("%-18s",courseOp.getCourseById(takes.getCourse_id()).getCourse_name())).append("\t")
+                                    .append(String.format("%-18s",takes.getEmployee_id())).append("\t")
+                                    .append(String.format("%-20s",(employeeOp.getEmployeeById(takes.getEmployee_id())).getName())).append("\t")
+                                    .append(String.format("%-20s",takes.getNumber())).append("\t");
+                            if (takes.getState()==null){
+                                showString.append(String.format("%-8s","未考试"));
+                            }else{
+                                showString.append(String.format("%-8s",takes.getState())).append("\t");
+                            }
+                            if(takes.getTime()==null){
+                                showString.append(String.format("%-20s","")).append("\t").append("\n");
+                            }else{
+                                showString.append(String.format("%-20s","")).append(takes.getTime()).append("\n");
+                            }
                         }
-                        manage_area.appendText(showString.toString());
+                        manage_area.setText(showString.toString());
                     }
                 }else{
                     // 员工姓名
                     List<Takes> takesList = managerOp.queryTakesByName(employeeId);
-                    StringBuilder showString = new StringBuilder("课程号 课程名 考试成绩 通过状态 考试时间\n");
+                    StringBuilder showString = new StringBuilder();
+                    showString.append(String.format("%-12s","课程号")).append("\t")
+                            .append(String.format("%-18s","课程名")).append("\t")
+                            .append(String.format("%-18s","员工号")).append("\t")
+                            .append(String.format("%-20s","员工名")).append("\t")
+                            .append(String.format("%-8s","考试成绩")).append("\t")
+                            .append(String.format("%-12s","通过状态")).append("\t")
+                            .append(String.format("%-20s","考试时间")).append("\t")
+                            .append("\n");
                     for(Takes takes : takesList){
-                        showString.append(takes.getCourse_id()).append("  ")
-                                .append(courseOp.getCourseById(takes.getCourse_id()).getCourse_name()).append("  ")
-                                .append(takes.getNumber()).append("  ")
-                                .append(takes.getState()).append("  ")
-                                .append(takes.getTime()).append("  ")
-                                .append("\n");
+                        showString.append(String.format("%-12s",takes.getCourse_id())).append("\t")
+                                .append(String.format("%-18s",courseOp.getCourseById(takes.getCourse_id()).getCourse_name())).append("\t")
+                                .append(String.format("%-18s",takes.getEmployee_id())).append("\t")
+                                .append(String.format("%-20s",(employeeOp.getEmployeeById(takes.getEmployee_id())).getName())).append("\t")
+                                .append(String.format("%-20s",takes.getNumber())).append("\t");
+                        if (takes.getState()==null){
+                            showString.append(String.format("%-8s","未考试"));
+                        }else{
+                            showString.append(String.format("%-8s",takes.getState())).append("\t");
+                        }
+                        if(takes.getTime()==null){
+                            showString.append(String.format("%-20s","")).append("\t").append("\n");
+                        }else{
+                            showString.append(String.format("%-20s","")).append(takes.getTime()).append("\n");
+                        }
                     }
-                    manage_area.appendText(showString.toString());
+                    manage_area.setText(showString.toString());
                 }
             } catch (NumberFormatException exception){
                 new Alert(Alert.AlertType.NONE, "请填写相应员工号", new ButtonType[]{ButtonType.CLOSE}).show();

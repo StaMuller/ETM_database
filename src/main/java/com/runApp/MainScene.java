@@ -93,11 +93,15 @@ public class MainScene extends Application {
 
         instructorButton.setOnMouseClicked(e ->{
             try{
-                Employee instructor = instructorOp.getInstructorById(Long.parseLong(id_area.getText()));
-                if(instructor == null){
-                    new Alert(Alert.AlertType.NONE, "该员工号无法使用该权限", new ButtonType[]{ButtonType.CLOSE}).show();
+                if(employeeOp.getEmployeeById(Long.parseLong(id_area.getText())) == null){
+                    new Alert(Alert.AlertType.NONE, "员工号不存在", new ButtonType[]{ButtonType.CLOSE}).show();
                 }else{
-                    primaryStage.setScene(instructorScene.setInstructor(instructor, primaryStage, scene));
+                    Employee instructor = instructorOp.getInstructorById(Long.parseLong(id_area.getText()));
+                    if(instructor == null){
+                        new Alert(Alert.AlertType.NONE, "该员工号无法使用该权限", new ButtonType[]{ButtonType.CLOSE}).show();
+                    }else{
+                        primaryStage.setScene(instructorScene.setInstructor(instructor, primaryStage, scene));
+                    }
                 }
             } catch (NumberFormatException exception){
                 new Alert(Alert.AlertType.NONE, "请填写相应员工号", new ButtonType[]{ButtonType.CLOSE}).show();
@@ -107,11 +111,15 @@ public class MainScene extends Application {
         });
         employeeButton.setOnMouseClicked(e ->{
             try{
-                Employee employee = employeeOp.getEmployeeById(Long.parseLong(id_area.getText()));
-                if(employee == null){
-                    new Alert(Alert.AlertType.NONE, "不存在该员工号", new ButtonType[]{ButtonType.CLOSE}).show();
+                if(employeeOp.getEmployeeById(Long.parseLong(id_area.getText())) == null){
+                    new Alert(Alert.AlertType.NONE, "员工号不存在", new ButtonType[]{ButtonType.CLOSE}).show();
                 }else{
-                    primaryStage.setScene(employeeScene.setEmployee(employee, primaryStage, scene));
+                    Employee employee = employeeOp.getEmployeeById(Long.parseLong(id_area.getText()));
+                    if(employee == null){
+                        new Alert(Alert.AlertType.NONE, "不存在该员工号", new ButtonType[]{ButtonType.CLOSE}).show();
+                    }else{
+                        primaryStage.setScene(employeeScene.setEmployee(employee, primaryStage, scene));
+                    }
                 }
             } catch (NumberFormatException exception){
                 new Alert(Alert.AlertType.NONE, "请填写相应员工号", new ButtonType[]{ButtonType.CLOSE}).show();
@@ -122,11 +130,15 @@ public class MainScene extends Application {
 
         managerButton.setOnMouseClicked(e ->{
             try{
-                Employee manager = managerOp.getManagerById(Long.parseLong(id_area.getText()));
-                if(manager == null){
-                    new Alert(Alert.AlertType.NONE, "该员工号无法使用该权限", new ButtonType[]{ButtonType.CLOSE}).show();
+                if(employeeOp.getEmployeeById(Long.parseLong(id_area.getText())) == null){
+                    new Alert(Alert.AlertType.NONE, "员工号不存在", new ButtonType[]{ButtonType.CLOSE}).show();
                 }else{
-                    primaryStage.setScene(managerScene.setManager(manager, primaryStage, scene));
+                    Employee manager = managerOp.getManagerById(Long.parseLong(id_area.getText()));
+                    if(manager == null){
+                        new Alert(Alert.AlertType.NONE, "该员工号无法使用该权限", new ButtonType[]{ButtonType.CLOSE}).show();
+                    }else{
+                        primaryStage.setScene(managerScene.setManager(manager, primaryStage, scene));
+                    }
                 }
             } catch (NumberFormatException exception){
                 new Alert(Alert.AlertType.NONE, "请填写相应员工号", new ButtonType[]{ButtonType.CLOSE}).show();
@@ -134,14 +146,17 @@ public class MainScene extends Application {
                 exception.printStackTrace();
             }
         });
-
         administratorButton.setOnMouseClicked(e ->{
             try{
-                Employee administrator = administratorOp.getAdminById(Long.parseLong(id_area.getText()));
-                if(administrator == null){
-                    new Alert(Alert.AlertType.NONE, "该员工号无法使用该权限", new ButtonType[]{ButtonType.CLOSE}).show();
+                if(employeeOp.getEmployeeById(Long.parseLong(id_area.getText())) == null){
+                    new Alert(Alert.AlertType.NONE, "员工号不存在", new ButtonType[]{ButtonType.CLOSE}).show();
                 }else{
-                    primaryStage.setScene(administratorScene.setAdministrator(administrator, primaryStage, scene));
+                    Employee administrator = administratorOp.getAdminById(Long.parseLong(id_area.getText()));
+                    if(administrator == null){
+                        new Alert(Alert.AlertType.NONE, "该员工号无法使用该权限", new ButtonType[]{ButtonType.CLOSE}).show();
+                    }else{
+                        primaryStage.setScene(administratorScene.setAdministrator(administrator, primaryStage, scene));
+                    }
                 }
             } catch (NumberFormatException exception){
                 new Alert(Alert.AlertType.NONE, "请填写相应员工号", new ButtonType[]{ButtonType.CLOSE}).show();

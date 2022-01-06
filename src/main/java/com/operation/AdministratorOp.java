@@ -43,17 +43,19 @@ public class AdministratorOp {
 
     // ad (1 删除
     public boolean deleteEmployee(Long employeeId){
-        // 删除教员
-        // 1、设置对应课程的教员号为全0
-        // 2、删除instructor数据
-        // 3、删除employee数据
         if(employeeMapper.getEmployeeById(employeeId) == null){
             return false;
         }
+
+        // 删除教员
+        // 1、删除instructor数据
+        // 2、删除employee数据
         Instructor instructor = instructorMapper.getInstructorById(employeeId);
         if(instructor != null){
-            courseMapper.updateInstructorOfCourse(employeeId);
             instructorMapper.deleteInstructor(employeeId);
+            employeeMapper.deleteEmployee(employeeId);
+            sqlSession.commit();
+            return true;
         }
 
         // 删除部门主管
@@ -62,12 +64,14 @@ public class AdministratorOp {
         Manager manager = managerMapper.findManagerById(employeeId);
         if(manager != null){
             managerMapper.deleteManager(employeeId);
+            employeeMapper.deleteEmployee(employeeId);
+            sqlSession.commit();
+            return true;
         }
 
         // 1、删除employee数据
         // 2、删除takes数据
         employeeMapper.deleteEmployee(employeeId);
-        takesMapper.deleteTakesRecord(employeeId);
         sqlSession.commit();
         return true;
     }
@@ -90,13 +94,11 @@ public class AdministratorOp {
 
     // ad (2 删除
     public boolean deleteCourse(Long courseId){
-        // 1、删除necessity数据
-        // 2、删除course数据
+        // 删除course数据
         if(courseMapper.getCourseById(courseId) == null){
             return false;
         }
         courseMapper.deleteCourse(courseId);
-        necessityMapper.deleteNecessity(courseId);
         sqlSession.commit();
         return true;
     }
@@ -110,26 +112,6 @@ public class AdministratorOp {
     // ad (2 查找
     public List<Course> queryAllCourse(){
         return administratorMapper.queryAllCourse();
-    }
-
-    // ad (3 根据员工号查询用户的个人基本信息与培训成绩信息
-    public Info queryInfoById(Long employeeId){
-        Employee employee = employeeMapper.getEmployeeById(employeeId);
-        List<Takes> takesList = takesMapper.gradeOfEmployee(employeeId);
-        Info info = new Info();
-        info.setEmployee(employee);
-        info.setTakes(takesList);
-        return info;
-    }
-
-    // ad (3 根据姓名查询用户的个人基本信息与培训成绩信息：可能会有重名用户
-    public List<Info> queryInfoByName(String name){
-        List<Employee> employeeList = employeeMapper.getEmployeeByName(name);
-        List<Info> infoList = new ArrayList<>();
-        for(Employee employee : employeeList){
-            infoList.add(queryInfoById(employee.getId()));
-        }
-        return infoList;
     }
 
     // ad (4 管理日志信息：默认只能查看日志与增加日志，不能删除或修改日志
