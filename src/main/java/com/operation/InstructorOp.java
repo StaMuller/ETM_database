@@ -22,7 +22,7 @@ public class InstructorOp {
     EmployeeMapper employeeMapper = sqlSession.getMapper(EmployeeMapper.class);
     TakesMapper takesMapper = sqlSession.getMapper(TakesMapper.class);
     CourseMapper courseMapper = sqlSession.getMapper(CourseMapper.class);
-
+    EmployeeOp employeeOp = new EmployeeOp();
     public List<Instructor> getAllInstructor(){
         return instructorMapper.getAllInstructor();
     }
@@ -43,7 +43,7 @@ public class InstructorOp {
             List<Long> temp = instructorMapper.getInstructedEmployee(employeeId);
             List<Employee> employeeList = new ArrayList<>();
             for (Long i : temp) {
-                employeeList.add(employeeMapper.getEmployeeById(Long.parseLong(String.valueOf(i))));
+                employeeList.add(employeeOp.getEmployeeById(Long.parseLong(String.valueOf(i))));
             }
             return employeeList;
         }
@@ -76,5 +76,8 @@ public class InstructorOp {
         }
     }
 
+    public void close(){
+        sqlSession.close();
+    }
 }
 

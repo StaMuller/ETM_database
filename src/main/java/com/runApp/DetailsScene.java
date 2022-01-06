@@ -1,25 +1,16 @@
 package com.runApp;
 
-import com.bean.Course;
 import com.bean.Employee;
 import com.bean.Takes;
 import com.operation.CourseOp;
 import com.operation.DepartmentOp;
 import com.operation.EmployeeOp;
-import com.runApp.Container.EmployeeView;
-import javafx.beans.binding.Bindings;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import javafx.util.converter.IntegerStringConverter;
-import javafx.util.converter.LongStringConverter;
 
 import java.util.List;
 

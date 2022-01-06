@@ -13,8 +13,6 @@ import javafx.stage.Stage;
 import javafx.scene.Group;
 import javafx.scene.text.Font;
 
-import java.util.List;
-
 // 主界面
 public class MainScene extends Application {
 
@@ -22,11 +20,11 @@ public class MainScene extends Application {
     EmployeeScene employeeScene = new EmployeeScene();
     ManagerScene managerScene = new ManagerScene();
     AdministratorScene administratorScene = new AdministratorScene();
-
     InstructorOp instructorOp = new InstructorOp();
     EmployeeOp employeeOp = new EmployeeOp();
     ManagerOp managerOp = new ManagerOp();
     AdministratorOp administratorOp = new AdministratorOp();
+
     @Override
     public void start(Stage primaryStage) {
         Group root = new Group();

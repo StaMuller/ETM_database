@@ -93,20 +93,23 @@ public class ExamScene {
                     }else{
                         List<Takes> takesList = managerOp.queryTakesOfCourse(Long.parseLong(courseId));
                         if(takesList.size() != 0){
-                            StringBuilder showString = new StringBuilder("课程号 课程名 员工号 员工姓名 考试成绩 考试时间 \n");
+                            StringBuilder showString = new StringBuilder();
+                            showString.append(String.format("%-12s","课程号")).append("\t")
+                                    .append(String.format("%-18s","课程名")).append("\t")
+                                    .append(String.format("%-18s","员工号")).append("\t")
+                                    .append(String.format("%-20s","员工名")).append("\t")
+                                    .append(String.format("%-12s","考试成绩")).append("\t").append("\n");
                             for(Takes takes : takesList){
-                                showString.append(takes.getCourse_id()).append("  ");
-                                showString.append(courseOp.getCourseById(takes.getCourse_id()).getCourse_name()).append("  ")
-                                        .append(takes.getEmployee_id()).append("  ");
-                                showString.append(employeeOp.getEmployeeById(takes.getEmployee_id()).getName()).append("  ")
-                                        .append(takes.getNumber()).append("  ")
-                                        .append(takes.getState()).append("  ")
-                                        .append(takes.getTime()).append("  ")
+                                showString.append(String.format("%-12s",takes.getCourse_id())).append("\t")
+                                        .append(String.format("%-18s",courseOp.getCourseById((Long) takes.getCourse_id()).getCourse_name())).append("\t")
+                                        .append(String.format("%-18s",takes.getEmployee_id())).append("\t")
+                                        .append(String.format("%-20s",(employeeOp.getEmployeeById((Long)takes.getEmployee_id())).getName())).append("\t")
+                                        .append(String.format("%-12s",takes.getNumber())).append("\t")
                                         .append("\n");
                             }
-                            manage_area.appendText(showString.toString());
+                            manage_area.setText(showString.toString());
                         }else{
-                            manage_area.appendText("无该课程相关培训信息");
+                            manage_area.setText("无该课程相关培训信息");
                         }
                     }
                 }else{

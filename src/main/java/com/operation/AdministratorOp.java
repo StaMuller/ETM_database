@@ -18,8 +18,6 @@ public class AdministratorOp {
     InstructorMapper instructorMapper = sqlSession.getMapper(InstructorMapper.class);
     CourseMapper courseMapper = sqlSession.getMapper(CourseMapper.class);
     ManagerMapper managerMapper = sqlSession.getMapper(ManagerMapper.class);
-    TakesMapper takesMapper = sqlSession.getMapper(TakesMapper.class);
-    NecessityMapper necessityMapper = sqlSession.getMapper(NecessityMapper.class);
     DepartmentMapper departmentMapper = sqlSession.getMapper(DepartmentMapper.class);
 
     public Employee getAdminById(Long employeeId){

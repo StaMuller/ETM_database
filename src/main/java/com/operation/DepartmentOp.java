@@ -15,4 +15,7 @@ public class DepartmentOp {
     public int getDeptIdByName(String deptName){
         return departmentMapper.getDeptIdByName(deptName);
     }
+    public void close(){
+        sqlSession.close();
+    }
 }

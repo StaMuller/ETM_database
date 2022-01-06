@@ -1,6 +1,7 @@
 package com.runApp;
 
 import com.bean.Employee;
+import com.operation.AdministratorOp;
 import com.operation.DepartmentOp;
 import com.operation.InstructorOp;
 import javafx.scene.Group;
@@ -17,6 +18,7 @@ public class InstructorScene {
 
     InstructorOp instructorOp = new InstructorOp();
     DepartmentOp departmentOp = new DepartmentOp();
+    AdministratorOp administratorOp = new AdministratorOp();
 
     public Scene setInstructor(Employee instructor, Stage primaryStage, Scene primaryScene) {
         Group root = new Group();
@@ -69,12 +71,13 @@ public class InstructorScene {
                         .append(String.format("%-4s","年龄")).append("\t")
                         .append(String.format("%-45s","入职时间")).append("\t")
                         .append(String.format("%-20s","地址")).append("\t")
-                        .append(String.format("%-38s","联系电话")).append("\t")
+                        .append(String.format("%-30s","联系电话")).append("\t")
                         .append(String.format("%-40s","邮箱地址")).append("\t")
                         .append(String.format("%-6s","所在部门")).append("\t").append("\n");
-                teach_area.appendText(String.valueOf(showString));
+                teach_area.setText(String.valueOf(showString));
 
                 for(Employee employee : employeeList) {
+                    System.out.println(employee.getId());
                     StringBuilder temp = new StringBuilder();
                     temp.append(String.format("%-18s", employee.getId())).append("\t")
                             .append(String.format("%-20s",employee.getName())).append("\t")
@@ -82,7 +85,7 @@ public class InstructorScene {
                             .append(String.format("%-4s",employee.getAge())).append("\t")
                             .append(String.format("%-45s",employee.getTime())).append("\t")
                             .append(String.format("%-20s",employee.getAddress())).append("\t")
-                            .append(String.format("%-38s",employee.getTelephone())).append("\t")
+                            .append(String.format("%-30s",employee.getTelephone())).append("\t")
                             .append(String.format("%-40s",employee.getEmail())).append("\t")
                             .append(String.format("%-6s",departmentOp.getDeptNameById(employee.getDept()))).append("\n");
                teach_area.appendText(String.valueOf(temp));
@@ -143,6 +146,7 @@ public class InstructorScene {
             map.put("number", number);
             if(instructorOp.inputScore(map, instructor.getId())){
                 new Alert(Alert.AlertType.NONE, "录入成功", new ButtonType[]{ButtonType.CLOSE}).show();
+                administratorOp.addLog(instructor.getId(),"录入员工"+employeeId+"成绩");
             }else{
                 new Alert(Alert.AlertType.NONE, "录入失败\n可能原因：您无权限导入该成绩\n或该员工没有无成绩的该课程信息", new ButtonType[]{ButtonType.CLOSE}).show();
             }

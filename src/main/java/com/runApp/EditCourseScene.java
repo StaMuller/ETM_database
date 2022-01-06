@@ -1,7 +1,9 @@
 package com.runApp;
 
 import com.bean.Course;
+import com.bean.Employee;
 import com.operation.AdministratorOp;
+import com.operation.CourseOp;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -20,8 +22,9 @@ import java.util.List;
 public class EditCourseScene {
 
     AdministratorOp administratorOp = new AdministratorOp();
+    CourseOp courseOp = new CourseOp();
 
-    public Scene setCourse(Stage primaryStage, Scene primaryScene){
+    public Scene setCourse(Employee administrator, Stage primaryStage, Scene primaryScene){
         Group root = new Group();
         Scene scene = new Scene(root, 1200, 600);
         scene.setFill(Paint.valueOf("LightGrey"));
@@ -123,6 +126,7 @@ public class EditCourseScene {
                 administratorOp.updateCourse(courseTemp);
             }
             new Alert(Alert.AlertType.NONE, "修改成功", new ButtonType[]{ButtonType.CLOSE}).show();
+            administratorOp.addLog(administrator.getId(),"修改课程信息");
         });
 
         // 删除课程
@@ -142,6 +146,7 @@ public class EditCourseScene {
         delete.setOnMouseClicked(e -> {
             if(administratorOp.deleteCourse(Long.parseLong(delete_area.getText()))){
                 new Alert(Alert.AlertType.NONE, "删除成功", new ButtonType[]{ButtonType.CLOSE}).show();
+                administratorOp.addLog(administrator.getId(),"删除课程"+delete_area.getText());
             }else{
                 new Alert(Alert.AlertType.NONE, "删除失败", new ButtonType[]{ButtonType.CLOSE}).show();
             }
@@ -150,6 +155,45 @@ public class EditCourseScene {
             data.clear();
             data.addAll(allCourse);
             course.setItems(data);
+        });
+
+        // 关联课程与部门
+        final Label course_relation_label = new Label("课程号");
+        course_relation_label.setLayoutX(930);
+        course_relation_label.setLayoutY(240);
+        course_relation_label.setFont(area);
+        root.getChildren().add(course_relation_label);
+        final TextArea course_relation_area = new TextArea();
+        course_relation_area.setLayoutX(990);
+        course_relation_area.setLayoutY(230);
+        course_relation_area.setPrefWidth(70);
+        course_relation_area.setPrefHeight(10);
+        course_relation_area.setWrapText(true);
+        final Label dept_relation_label = new Label("部门号");
+        dept_relation_label.setLayoutX(1080);
+        dept_relation_label.setLayoutY(240);
+        dept_relation_label.setFont(area);
+        root.getChildren().add(dept_relation_label);
+        final TextArea dept_relation_area = new TextArea();
+        dept_relation_area.setLayoutX(1140);
+        dept_relation_area.setLayoutY(230);
+        dept_relation_area.setPrefWidth(10);
+        dept_relation_area.setPrefHeight(10);
+        dept_relation_area.setWrapText(true);
+        final Button relation = new Button("关联该课程与该部门");
+        relation.setLayoutX(990);
+        relation.setLayoutY(280);
+        relation.setMinHeight(30);
+        relation.setMinWidth(100);
+        relation.setFont(button);
+        root.getChildren().addAll(course_relation_area, dept_relation_area, relation);
+        relation.setOnMouseClicked(e -> {
+            if(courseOp.courseDept(Long.parseLong(course_relation_area.getText())
+                    , Integer.parseInt(dept_relation_area.getText()))){
+                new Alert(Alert.AlertType.NONE, "关联成功", new ButtonType[]{ButtonType.CLOSE}).show();
+            }else{
+                new Alert(Alert.AlertType.NONE, "关联失败", new ButtonType[]{ButtonType.CLOSE}).show();
+            }
         });
 
         // 增加课程
@@ -221,16 +265,21 @@ public class EditCourseScene {
         add.setFont(button);
         root.getChildren().add(add);
         add.setOnMouseClicked(e -> {
-            Course temp = newCourseData.get(0);
-            if(administratorOp.addCourse(temp)){
-                allCourse.clear();
-                allCourse.addAll(administratorOp.queryAllCourse());
-                data.clear();
-                data.addAll(allCourse);
-                course.setItems(data);
-                new Alert(Alert.AlertType.NONE, "添加成功", new ButtonType[]{ButtonType.CLOSE}).show();
-            }else{
-                new Alert(Alert.AlertType.NONE, "添加失败", new ButtonType[]{ButtonType.CLOSE}).show();
+            try{
+                Course temp = newCourseData.get(0);
+                if(administratorOp.addCourse(temp)){
+                    allCourse.clear();
+                    allCourse.addAll(administratorOp.queryAllCourse());
+                    data.clear();
+                    data.addAll(allCourse);
+                    course.setItems(data);
+                    new Alert(Alert.AlertType.NONE, "添加成功", new ButtonType[]{ButtonType.CLOSE}).show();
+                    administratorOp.addLog(administrator.getId(),"添加课程"+newTableColumnContent.getId());
+                }else{
+                    new Alert(Alert.AlertType.NONE, "添加失败", new ButtonType[]{ButtonType.CLOSE}).show();
+                }
+            }catch (Exception exception){
+                new Alert(Alert.AlertType.NONE, "请完整填写", new ButtonType[]{ButtonType.CLOSE}).show();
             }
         });
         return scene;

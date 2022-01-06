@@ -3,6 +3,7 @@ package com.runApp;
 import com.bean.Course;
 import com.bean.Employee;
 import com.bean.Takes;
+import com.operation.AdministratorOp;
 import com.operation.DepartmentOp;
 import com.operation.EmployeeOp;
 import com.operation.ManagerOp;
@@ -22,6 +23,7 @@ public class ManagerScene {
     EmployeeOp employeeOp = new EmployeeOp();
     DepartmentOp departmentOp = new DepartmentOp();
     ManagerOp managerOp = new ManagerOp();
+    AdministratorOp administratorOp = new AdministratorOp();
 
     public Scene setManager(Employee manager, Stage primaryStage, Scene primaryScene){
         Group root = new Group();
@@ -194,6 +196,7 @@ public class ManagerScene {
                     }else{
                         if(managerOp.addCourseById(Long.parseLong(courseId), Long.parseLong(employeeId))){
                             new Alert(Alert.AlertType.NONE, "分配课程成功", new ButtonType[]{ButtonType.CLOSE}).show();
+                            administratorOp.addLog(manager.getId(),"分配课程"+courseId+"给员工"+employeeId);
                         }else{
                             new Alert(Alert.AlertType.NONE, "该员工号或课程号不存在", new ButtonType[]{ButtonType.CLOSE}).show();
                         }

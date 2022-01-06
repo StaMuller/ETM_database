@@ -3,6 +3,7 @@ package com.runApp;
 import com.bean.Course;
 import com.bean.Employee;
 import com.bean.Takes;
+import com.operation.AdministratorOp;
 import com.operation.CourseOp;
 import com.operation.DepartmentOp;
 import com.operation.EmployeeOp;
@@ -23,11 +24,11 @@ import javafx.util.converter.LongStringConverter;
 
 import java.util.List;
 
-
 public class EmployeeScene {
 
     EmployeeOp employeeOp = new EmployeeOp();
     DepartmentOp departmentOp = new DepartmentOp();
+    AdministratorOp administratorOp = new AdministratorOp();
     CourseOp courseOp = new CourseOp();
 
     public Scene setEmployee(Employee employee, Stage primaryStage, Scene primaryScene){
@@ -128,18 +129,24 @@ public class EmployeeScene {
         commit.setFont(button);
         root.getChildren().add(commit);
         commit.setOnMouseClicked(e -> {
-            Employee temp = new Employee();
-            temp.setId(employee.getId());
-            temp.setName(data.get(0).getName());
-            temp.setGender(employee.getGender());
-            temp.setAge(data.get(0).getAge());
-            temp.setTime(employee.getTime());
-            temp.setAddress(data.get(0).getAddress());
-            temp.setTelephone(data.get(0).getTelephone());
-            temp.setEmail(data.get(0).getEmail());
-            temp.setDept(employee.getDept());
-            employeeOp.reviseInfo(temp);
-            new Alert(Alert.AlertType.NONE, "修改成功", new ButtonType[]{ButtonType.CLOSE}).show();
+            try{
+                Employee temp = new Employee();
+                temp.setId(employee.getId());
+                temp.setName(data.get(0).getName());
+                temp.setGender(employee.getGender());
+                temp.setAge(data.get(0).getAge());
+                temp.setTime(employee.getTime());
+                temp.setAddress(data.get(0).getAddress());
+                temp.setTelephone(data.get(0).getTelephone());
+                temp.setEmail(data.get(0).getEmail());
+                temp.setDept(employee.getDept());
+                employeeOp.reviseInfo(temp);
+                new Alert(Alert.AlertType.NONE, "修改成功", new ButtonType[]{ButtonType.CLOSE}).show();
+                administratorOp.addLog(employee.getId(),"修改个人信息");
+            }catch (Exception exception){
+                new Alert(Alert.AlertType.NONE, "修改失败", new ButtonType[]{ButtonType.CLOSE}).show();
+            }
+
         });
 
         // 查看被分配的课程与教员信息

@@ -15,4 +15,15 @@
         where course_id = #{courseId};
     </delete>
 
+    <insert id="courseDept">
+        insert into necessity
+        values (null, #{courseId}, #{deptId});
+    </insert>
+
+    <select id="findNecessity" resultType="com.bean.Necessity">
+        select *
+        from necessity
+        where course_id = #{courseId} and dept_id = #{deptId};
+    </select>
+
 </mapper>

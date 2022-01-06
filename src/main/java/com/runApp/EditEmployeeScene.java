@@ -29,7 +29,7 @@ public class EditEmployeeScene {
     DepartmentOp departmentOp = new DepartmentOp();
     AdministratorOp administratorOp = new AdministratorOp();
 
-    public Scene setEmployee(Stage primaryStage, Scene primaryScene){
+    public Scene setEmployee(Employee administrator,Stage primaryStage, Scene primaryScene){
         Group root = new Group();
         Scene scene = new Scene(root, 1200, 600);
         scene.setFill(Paint.valueOf("LightGrey"));
@@ -139,6 +139,7 @@ public class EditEmployeeScene {
                 employeeOp.reviseInfo(temp);
             }
             new Alert(Alert.AlertType.NONE, "修改成功", new ButtonType[]{ButtonType.CLOSE}).show();
+            administratorOp.addLog(administrator.getId(),"修改员工信息");
         });
 
         // 删除员工
@@ -158,6 +159,7 @@ public class EditEmployeeScene {
         delete.setOnMouseClicked(e -> {
             if(administratorOp.deleteEmployee(Long.parseLong(delete_area.getText()))){
                 new Alert(Alert.AlertType.NONE, "删除成功", new ButtonType[]{ButtonType.CLOSE}).show();
+                administratorOp.addLog(administrator.getId(),"删除员工"+delete_area.getText());
             }else{
                 new Alert(Alert.AlertType.NONE, "删除失败", new ButtonType[]{ButtonType.CLOSE}).show();
             }
@@ -280,32 +282,37 @@ public class EditEmployeeScene {
         add.setFont(button);
         root.getChildren().add(add);
         add.setOnMouseClicked(e -> {
-            EmployeeView employeeView = newEmployeeData.get(0);
-            Employee temp = new Employee();
-            temp.setId(employeeView.getId());
-            temp.setName(employeeView.getName());
-            temp.setGender(employeeView.getGender());
-            temp.setAge(employeeView.getAge());
-            Date date = new Date();
-            temp.setTime(new Timestamp(date.getTime()));
-            temp.setAddress(employeeView.getAddress());
-            temp.setTelephone(employeeView.getTelephone());
-            temp.setEmail(employeeView.getEmail());
-            temp.setDept(departmentOp.getDeptIdByName(employeeView.getDept()));
-            if(administratorOp.addEmployee(temp)){
-                allEmployee.clear();
-                allEmployee.addAll(administratorOp.queryAllEmployee());
-                data.clear();
-                for(Employee employee : allEmployee){
-                    EmployeeView tempEmployeeView = new EmployeeView(employee.getId(), employee.getName(), employee.getGender(), employee.getAge(),
-                            employee.getTime(), employee.getAddress(), employee.getTelephone(), employee.getEmail(),
-                            departmentOp.getDeptNameById(employee.getDept()));
-                    data.add(tempEmployeeView);
+            try {
+                EmployeeView employeeView = newEmployeeData.get(0);
+                Employee temp = new Employee();
+                temp.setId(employeeView.getId());
+                temp.setName(employeeView.getName());
+                temp.setGender(employeeView.getGender());
+                temp.setAge(employeeView.getAge());
+                Date date = new Date();
+                temp.setTime(new Timestamp(date.getTime()));
+                temp.setAddress(employeeView.getAddress());
+                temp.setTelephone(employeeView.getTelephone());
+                temp.setEmail(employeeView.getEmail());
+                temp.setDept(departmentOp.getDeptIdByName(employeeView.getDept()));
+                if (administratorOp.addEmployee(temp)) {
+                    allEmployee.clear();
+                    allEmployee.addAll(administratorOp.queryAllEmployee());
+                    data.clear();
+                    for (Employee employee : allEmployee) {
+                        EmployeeView tempEmployeeView = new EmployeeView(employee.getId(), employee.getName(), employee.getGender(), employee.getAge(),
+                                employee.getTime(), employee.getAddress(), employee.getTelephone(), employee.getEmail(),
+                                departmentOp.getDeptNameById(employee.getDept()));
+                        data.add(tempEmployeeView);
+                    }
+                    person.setItems(data);
+                    new Alert(Alert.AlertType.NONE, "添加成功", new ButtonType[]{ButtonType.CLOSE}).show();
+                    administratorOp.addLog(administrator.getId(), "添加员工" + employeeView.getId());
+                } else {
+                    new Alert(Alert.AlertType.NONE, "添加失败", new ButtonType[]{ButtonType.CLOSE}).show();
                 }
-                person.setItems(data);
-                new Alert(Alert.AlertType.NONE, "添加成功", new ButtonType[]{ButtonType.CLOSE}).show();
-            }else{
-                new Alert(Alert.AlertType.NONE, "添加失败", new ButtonType[]{ButtonType.CLOSE}).show();
+            }catch (Exception exception){
+                new Alert(Alert.AlertType.NONE, "请完整填写", new ButtonType[]{ButtonType.CLOSE}).show();
             }
         });
         return scene;

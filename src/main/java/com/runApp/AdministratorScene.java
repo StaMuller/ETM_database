@@ -46,7 +46,7 @@ public class AdministratorScene {
         root.getChildren().add(employeeInfoButton);
         employeeInfoButton.setOnMouseClicked(e ->{
             try{
-                primaryStage.setScene(editEmployeeScene.setEmployee(primaryStage, scene));
+                primaryStage.setScene(editEmployeeScene.setEmployee(administrator,primaryStage, scene));
             }catch (Exception exception){
                 exception.printStackTrace();
             }
@@ -60,7 +60,7 @@ public class AdministratorScene {
         root.getChildren().add(courseInfoButton);
         courseInfoButton.setOnMouseClicked(e ->{
             try{
-                primaryStage.setScene(editCourseScene.setCourse(primaryStage, scene));
+                primaryStage.setScene(editCourseScene.setCourse(administrator,primaryStage, scene));
             }catch (Exception exception){
                 exception.printStackTrace();
             }

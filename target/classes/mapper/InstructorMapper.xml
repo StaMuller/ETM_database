@@ -26,10 +26,10 @@
         where id = #{id};
     </select>
 
-    <select id="getInstructedEmployee" resultType="java.lang.Long" parameterType="com.bean.Instructor">
+    <select id="getInstructedEmployee" resultType="java.lang.Long" parameterType="java.lang.Long">
         select distinct employee_id
         from takes
-        where exists (
+        where course_id in(
             select course_id
             from course
             where instructor_id = #{id}

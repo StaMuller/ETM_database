@@ -3,10 +3,7 @@ package com.runApp;
 import com.bean.Course;
 import com.bean.Employee;
 import com.bean.Takes;
-import com.operation.CourseOp;
-import com.operation.DepartmentOp;
-import com.operation.EmployeeOp;
-import com.operation.ManagerOp;
+import com.operation.*;
 import com.runApp.Container.EmployeeView;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
@@ -26,6 +23,7 @@ public class TransScene {
     EmployeeOp employeeOp = new EmployeeOp();
     DepartmentOp departmentOp = new DepartmentOp();
     ManagerOp managerOp = new ManagerOp();
+    AdministratorOp administratorOp = new AdministratorOp();
 
     public Scene setTrans(Employee manager, Stage primaryStage, Scene primaryScene){
         Group root = new Group();
@@ -69,18 +67,26 @@ public class TransScene {
                 if (employeeList == null){
                     manage_area.setText("本部门下无符合转部门条件的员工");
                 }else{
-                    StringBuilder showString = new StringBuilder("员工号 员工名 性别 入职时间 地址 联系电话 邮箱地址 所在部门\n");
+                    StringBuilder showString = new StringBuilder();
+                    showString.append(String.format("%-18s","员工号")).append("\t")
+                            .append(String.format("%-20s","员工名")).append("\t")
+                            .append(String.format("%-8s","性别")).append("\t")
+                            .append(String.format("%-4s","年龄")).append("\t")
+                            .append(String.format("%-45s","入职时间")).append("\t")
+                            .append(String.format("%-20s","地址")).append("\t")
+                            .append(String.format("%-30s","联系电话")).append("\t")
+                            .append(String.format("%-40s","邮箱地址")).append("\t")
+                            .append(String.format("%-6s","所在部门")).append("\t").append("\n");
                     for(Employee employee : employeeList){
-                        showString.append(
-                                employee.getId()).append("  ")
-                                .append(employee.getName()).append("  ")
-                                .append(employee.getGender()).append("  ")
-                                .append(employee.getAge()).append("  ")
-                                .append(employee.getTime()).append("  ")
-                                .append(employee.getAddress()).append("  ")
-                                .append(employee.getTelephone()).append("  ")
-                                .append(employee.getEmail()).append("  ")
-                                .append(departmentOp.getDeptNameById(employee.getDept())).append("\n");
+                        showString.append(String.format("%-18s", employee.getId())).append("\t")
+                                .append(String.format("%-20s",employee.getName())).append("\t")
+                                .append(String.format("%-8s",employee.getGender())).append("\t")
+                                .append(String.format("%-4s",employee.getAge())).append("\t")
+                                .append(String.format("%-45s",employee.getTime())).append("\t")
+                                .append(String.format("%-20s",employee.getAddress())).append("\t")
+                                .append(String.format("%-30s",employee.getTelephone())).append("\t")
+                                .append(String.format("%-40s",employee.getEmail())).append("\t")
+                                .append(String.format("%-6s",departmentOp.getDeptNameById(employee.getDept()))).append("\n");
                     }
                     manage_area.setText(showString.toString());
                 }
@@ -150,6 +156,7 @@ public class TransScene {
             } catch (NumberFormatException exception){
                 new Alert(Alert.AlertType.NONE, "请填写相应员工号/姓名", new ButtonType[]{ButtonType.CLOSE}).show();
             } catch (Exception exception){
+                new Alert(Alert.AlertType.NONE, "请填写员工号和部门号", new ButtonType[]{ButtonType.CLOSE}).show();
                 exception.printStackTrace();
             }
         });
@@ -186,12 +193,14 @@ public class TransScene {
             try{
                 String employeeId = trans_area2.getText();
                 String deptId = trans_area1.getText();
+
                 if(employeeId.charAt(0) >= '0' && employeeId.charAt(0) <= '9'){
                     // 员工号
                     if(employeeOp.getEmployeeById(Long.parseLong(employeeId)).getDept() == manager.getDept()){
                         boolean flag = managerOp.transDeptById(Long.parseLong(employeeId),Integer.parseInt(deptId));
                         if (flag){
                             new Alert(Alert.AlertType.NONE, "转部门成功", new ButtonType[]{ButtonType.CLOSE}).show();
+                            administratorOp.addLog(manager.getId(),"将员工"+employeeId+"转至"+departmentOp.getDeptNameById(Integer.parseInt(deptId)));
                         }else{
                             new Alert(Alert.AlertType.NONE, "转部门失败", new ButtonType[]{ButtonType.CLOSE}).show();
                         }
@@ -221,6 +230,8 @@ public class TransScene {
             } catch (NumberFormatException exception){
                 new Alert(Alert.AlertType.NONE, "请填写相应员工号/姓名", new ButtonType[]{ButtonType.CLOSE}).show();
             } catch (Exception exception){
+                //部门号不存在的情况
+                new Alert(Alert.AlertType.NONE, "请填写正确的部门号和员工号", new ButtonType[]{ButtonType.CLOSE}).show();
                 exception.printStackTrace();
             }
         });
@@ -272,11 +283,6 @@ public class TransScene {
                 exception.printStackTrace();
             }
         });
-
-
         return scene;
     }
-
-
-
 }

@@ -14,7 +14,6 @@ public class EmployeeOp {
     SqlSession sqlSession = MybatisUtils.getSqlSession();
     EmployeeMapper employeeMapper = sqlSession.getMapper(EmployeeMapper.class);
 
-
     public List<Takes> getTakes(long id){
         return employeeMapper.getTakes(id);
     }

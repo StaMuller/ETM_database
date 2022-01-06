@@ -3,7 +3,6 @@ package com.operation;
 import com.bean.Course;
 import com.mapper.CourseMapper;
 import com.mapper.NecessityMapper;
-import com.mapper.TakesMapper;
 import com.utils.MybatisUtils;
 import org.apache.ibatis.session.SqlSession;
 
@@ -27,6 +26,16 @@ public class CourseOp {
 
     public Course getCourseById(Long courseId){
         return courseMapper.getCourseById(courseId);
+    }
+
+    public boolean courseDept(Long courseId, int deptId){
+        if(necessityMapper.findNecessity(courseId, deptId) != null){
+            return false;
+        }else{
+            necessityMapper.courseDept(courseId, deptId);
+            sqlSession.commit();
+            return true;
+        }
     }
 
     public void close(){
